@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         client_id: clientId,
         client_secret: secret,
         code,
-        redirect_uri: "https://tangential.ngrok.io/api/oauth",
+        redirect_uri: "https://tangential.eu.ngrok.io/api/oauth",
       },
     });
 
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       },
     });
 
-    res.status(200).json(response);
+    res.redirect('/');
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
