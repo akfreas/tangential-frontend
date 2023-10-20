@@ -39,13 +39,23 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
 
   return response.data;
 }
-export async function fetchEpics() {
+export async function fetchEpicsByProject() {
 
   const response = await makeJiraRequest({
     path: "search?jql=issuetype=Epic",
     method: "GET",
     body: null,
   });
+  const { issues } = response;
+  // Group epics by project
+  const projects = {};
+   issues.forEach(epic => {
+    const projectName = epic.fields.project.name;
+    if (!projects[projectName]) {
+      projects[projectName] = [];
+    }
 
-  return response;
+    projects[projectName].push(epic);
+  });
+  return projects;
 }

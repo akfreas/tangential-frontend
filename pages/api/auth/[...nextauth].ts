@@ -1,14 +1,9 @@
-import NextAuth, { NextAuthOptions, JWT, User, AdapterUser, Session } from 'next-auth';
+import NextAuth, {
+   NextAuthOptions, JWT,
+   User, AdapterUser, Session } from 'next-auth';
 import AtlassianProvider from 'next-auth/providers/atlassian';
+import { jsonGet, jsonPost } from '../../../utils/request';
 
-// Your jsonGet function
-async function jsonGet({ url, headers }: { url: string, headers: Record<string, string> }) {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers,
-  });
-  return await response.json();
-}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -26,6 +21,10 @@ export const authOptions: NextAuthOptions = {
     async jwt(params: { token: JWT, user?: User | AdapterUser, account?: { access_token: string }, profile?: any, trigger?: "signIn" | "signUp" | "update" }) {
       const { token, user, account, profile, trigger } = params;
       // Check if the jwt callback is invoked for sign-in or sign-up
+      console.log("jwt", JSON.stringify({ token, user, account, profile, trigger }, null, 2))
+
+      //TODO: handle refresh token
+
       if (trigger === 'signIn' || trigger === 'signUp') {
         if (account && profile) {
           const id = profile.id;
