@@ -9,20 +9,17 @@ export default async function ProgramsPage() {
   console.log("fetching epics");
   const projects = await fetchEpicsByProject();
   
-  jsonLog('projects', projects)
   return (
     <main className="p-4 md:p-10 mx-auto max-w-7xl">
       {Object.keys(projects).map(projectName => (
         <div key={projectName}>
-          <Title>{projectName}</Title>
-          <AccordionList className="mt-6">
-            {projects[projectName].map(epic => (
-              <Accordion key={epic.id}>
-                <AccordionHeader>{epic.fields.summary}</AccordionHeader>
-                <AccordionBody><p>{JSON.stringify(epic.fields.description.content)}</p></AccordionBody>
-              </Accordion>
-            ))}
-          </AccordionList>
+
+      <AccordionList className="mt-6">
+        <Accordion key={projectName}>
+          <AccordionHeader>{projectName}</AccordionHeader>
+            <AccordionBody><p>{projects[projectName].length}</p></AccordionBody>
+        </Accordion>
+      </AccordionList>
         </div>
       ))}
     </main>
