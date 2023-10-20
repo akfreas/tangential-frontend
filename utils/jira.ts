@@ -24,7 +24,6 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
     throw new Error("Authentication failed");
   } 
 
-  // console.log("session", session);
   const { accessToken, atlassianId } = session;
 
   const url = `https://api.atlassian.com/ex/jira/${atlassianId}/rest/api/3/${options.path}`;
@@ -44,18 +43,28 @@ export async function fetchEpicsByProject() {
   const response = await makeJiraRequest({
     path: "search?jql=issuetype=Epic",
     method: "GET",
-    body: null,
+    body: null, 
   });
   const { issues } = response;
   // Group epics by project
   const projects = {};
-   issues.forEach(epic => {
+  await Promise.all(issues.map(async (epic) => {
     const projectName = epic.fields.project.name;
     if (!projects[projectName]) {
       projects[projectName] = [];
     }
-
-    projects[projectName].push(epic);
-  });
+    const changes = await fetchChangesForIssue({ issueId: epic.id });
+    console.log("changes", changes)
+    projects[projectName].push({ ...epic, changes });
+  }));
   return projects;
+}
+
+export async function fetchChangesForIssue({ issueId }: { issueId: string }) {
+  const response = await makeJiraRequest({
+    path: `issue/${issueId}/changelog`,
+    method: "GET",
+    body: null,
+  });
+  return response;
 }

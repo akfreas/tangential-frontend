@@ -6,7 +6,6 @@ import { jsonLog } from "../../utils/logging";
 
 
 export default async function ProgramsPage() {
-  console.log("fetching epics");
   const projects = await fetchEpicsByProject();
   
   return (

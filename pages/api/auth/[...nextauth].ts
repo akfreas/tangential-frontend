@@ -21,8 +21,6 @@ export const authOptions: NextAuthOptions = {
     async jwt(params: { token: JWT, user?: User | AdapterUser, account?: { access_token: string }, profile?: any, trigger?: "signIn" | "signUp" | "update" }) {
       const { token, user, account, profile, trigger } = params;
       // Check if the jwt callback is invoked for sign-in or sign-up
-      console.log("jwt", JSON.stringify({ token, user, account, profile, trigger }, null, 2))
-
       //TODO: handle refresh token
 
       if (trigger === 'signIn' || trigger === 'signUp') {
@@ -43,7 +41,6 @@ export const authOptions: NextAuthOptions = {
           token.atlassianId = atlassianId;
         }
       }
-
       return token;
     },
     async session({ session, token, user }) {
