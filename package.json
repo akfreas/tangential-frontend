@@ -2,10 +2,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "postinstall": "patch-package",
+    "dev": "next dev"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.431.0",
@@ -20,6 +18,7 @@
     "@types/react-dom": "18.2.7",
     "@vercel/analytics": "^1.0.2",
     "autoprefixer": "^10.4.15",
+    "axios": "^1.5.1",
     "cookie": "^0.5.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
@@ -48,9 +47,5 @@
   "devDependencies": {
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0"
-  },
-  "scripts": {
-    "postinstall": "patch-package",
-    "dev": "next dev"
   }
 }
