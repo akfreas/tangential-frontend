@@ -30,17 +30,16 @@ export default async function ProgramsPage() {
             <TableBody>
               {data.map((project, index) => (
                 <TableRow key={index}>
-                  {jsonLog('avatar', project.avatar)}
                   <TableCell>
                     {/* <Image src={`https://tangential.eu.ngrok.io/api/atlassianProxy?url=${project.avatar}`}
                   width={50}
                   height={50} 
                   alt={project}/> */}
                   <img src={`https://tangential.eu.ngrok.io/api/atlassianProxy?url=${project.avatar}`} 
-     width="50" 
-     height="50" 
-     alt={project}
-     crossOrigin="use-credentials" />
+                        width="50" 
+                        height="50" 
+                        alt={project}
+                        crossOrigin="use-credentials" />
                   </TableCell>
                   <TableCell>
                     <p>{project.key}</p>
