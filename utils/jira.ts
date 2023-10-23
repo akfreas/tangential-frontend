@@ -2,6 +2,14 @@ import { GetServerSidePropsContext, Metadata, NextApiRequest, NextApiResponse } 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]"
 import { axiosInstance, jsonGet } from "./request";
+import { jsonLog } from "./logging";
+
+interface AtlassianAuthenticatedRequestOptions {
+  url: string;
+  method: string;
+  body: any;
+  responseType: string;
+}
 
 interface JiraRequestOptions {
   path: string;
@@ -18,10 +26,30 @@ export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePr
   return getServerSession(...args, authOptions)
 }
 
+export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthenticatedRequestOptions, req: NextApiRequest, res: NextApiResponse): Promise<any> {
+
+  const session: Session | null = await auth(req, res);  // pass req and res
+  if (session === null) {
+    throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed");
+  } 
+  const { accessToken } = session;
+
+  const response = await axiosInstance(options.url,
+    {
+    responseType: options.responseType,
+    method: options.method,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  // jsonLog("Response from atlassian", response)
+  return response;
+}
+
 async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
   const session: Session | null = await auth();
   if (session === null) {
-    throw new Error("Authentication failed");
+    throw new Error("makeJiraRequest: Authentication failed");
   } 
 
   const { accessToken, atlassianId } = session;
@@ -71,8 +99,10 @@ export async function fetchProjectsAndEpics() {
   const projectsWithEpics = await Promise.all(projects.map(async (project) => {
     const epics = await fetchEpicsForProject(project.id);
     return {
-      projectId: project.id,
-      projectName: project.name,
+      id: project.id,
+      name: project.name,
+      avatar: project.avatarUrls["48x48"],
+      key: project.key,
       epics,
     };
   }));

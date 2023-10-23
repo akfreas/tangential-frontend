@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader, AccordionList, Badge, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
+import { Accordion, AccordionBody, AccordionHeader, AccordionList, Badge, Card, Table, TableBody, 
+  TableCell, TableHead, TableHeaderCell, TableRow, Title } from "@tremor/react";
 import { fetchProjectsAndEpics } from "../../utils/jira";
 import { jsonLog } from "../../utils/logging";
 import { redirect } from 'next/navigation'
 
-
+import Image from 'next/image';
+import { jsonGet } from "../../utils/request";
 
 export default async function ProgramsPage() {
   try {
     const data = await fetchProjectsAndEpics();
+    
     return (
       <main className="p-4 md:p-10 mx-auto max-w-7xl">
         <Card>
@@ -16,7 +19,8 @@ export default async function ProgramsPage() {
           <Table className="mt-5">
             <TableHead>
               <TableRow>
-                <TableHeaderCell>Priority</TableHeaderCell>
+                <TableHeaderCell>Img</TableHeaderCell>
+                <TableHeaderCell>Key</TableHeaderCell>
                 <TableHeaderCell>Program</TableHeaderCell>
                 <TableHeaderCell>Status</TableHeaderCell>
                 <TableHeaderCell>Life Cycle</TableHeaderCell>
@@ -24,20 +28,30 @@ export default async function ProgramsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((issue, index) => (
+              {data.map((project, index) => (
                 <TableRow key={index}>
-                  <TableCell>{issue.fields.priority.name}</TableCell>
+                  {jsonLog('avatar', project.avatar)}
                   <TableCell>
-                    <p>{issue.fields.summary}</p>
+                    {/* <Image src={`https://tangential.eu.ngrok.io/api/atlassianProxy?url=${project.avatar}`}
+                  width={50}
+                  height={50} 
+                  alt={project}/> */}
+                  <img src={`https://tangential.eu.ngrok.io/api/atlassianProxy?url=${project.avatar}`} 
+     width="50" 
+     height="50" 
+     alt={project}
+     crossOrigin="use-credentials" />
                   </TableCell>
                   <TableCell>
-                    <Badge color="emerald">{issue.fields.status.name}</Badge>
+                    <p>{project.key}</p>
                   </TableCell>
                   <TableCell>
-                    <p>{issue.fields.status.statusCategory.name}</p>
+                    <p>{project.name}</p>
                   </TableCell>
                   <TableCell>
-                    <p>{issue.fields.customfield_10015}</p>
+                  </TableCell>
+                  <TableCell>
+                    <p></p>
                   </TableCell>
                 </TableRow>
               ))}
@@ -47,6 +61,7 @@ export default async function ProgramsPage() {
       </main>
     );
   } catch (error) {
-    return redirect('/signin');
+    console.error(error);
+    return redirect('/');
   }
 }

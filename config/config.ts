@@ -18,8 +18,6 @@ if (process.env.LOCAL_HTTP_PROXY) {
   httpInstance = new http.Agent();
 }
 
-console.log("xxxx httpsAgent", httpsInstance.createSocket);
-
 export const httpsAgent = httpsInstance;
 export const httpAgent = httpInstance;
 
