@@ -2,8 +2,8 @@ import NextAuth, {
    NextAuthOptions, JWT,
    User, AdapterUser, Session } from 'next-auth';
 import AtlassianProvider from 'next-auth/providers/atlassian';
-import { jsonGet, jsonPost } from '../../../utils/request';
-
+import { axiosInstance, jsonGet, jsonPost } from '../../../utils/request';
+import { httpAgent, httpsAgent } from '../../../config/config';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -26,9 +26,8 @@ export const authOptions: NextAuthOptions = {
       if (trigger === 'signIn' || trigger === 'signUp') {
         if (account && profile) {
           const id = profile.id;
-          const access_token = account.access_token;
+          const {access_token, refresh_token } = account;
           const resourceUrl = "https://api.atlassian.com/oauth/token/accessible-resources";
-          console.log("Fetching resource url", resourceUrl)
           const [{ id: atlassianId }] = await jsonGet({
             url: resourceUrl,
             headers: {
@@ -37,6 +36,7 @@ export const authOptions: NextAuthOptions = {
           });
           console.log("jira id", atlassianId)
           token.accessToken = access_token;
+          token.refreshToken = refresh_token;
           // Persist the id and any other needed data to the token
           token.atlassianId = atlassianId;
         }

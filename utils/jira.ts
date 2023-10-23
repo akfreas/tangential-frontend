@@ -36,29 +36,49 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
     },
   });
 
+
   return response.data;
 }
-export async function fetchEpicsByProject() {
 
+// Fetches the list of projects
+async function fetchProjects() {
   const response = await makeJiraRequest({
-    path: "search?jql=issuetype=Epic",
+    path: "project",
     method: "GET",
-    body: null, 
+    body: null,
+  });
+  return response;
+}
+
+// Fetches the list of epics for a given project
+async function fetchEpicsForProject(projectId) {
+  const response = await makeJiraRequest({
+    path: `search?jql=project=${projectId} AND issuetype=Epic`,
+    method: "GET",
+    body: null,
   });
   const { issues } = response;
-  // Group epics by project
-  const projects = {};
-  await Promise.all(issues.map(async (epic) => {
-    const projectName = epic.fields.project.name;
-    if (!projects[projectName]) {
-      projects[projectName] = [];
-    }
+  const epicsWithChanges = await Promise.all(issues.map(async (epic) => {
     const changes = await fetchChangesForIssue({ issueId: epic.id });
-    console.log("changes", changes)
-    projects[projectName].push({ ...epic, changes });
+    return { ...epic, changes };
   }));
-  return projects;
+  return epicsWithChanges;
 }
+
+// Main function to fetch projects and their epics
+export async function fetchProjectsAndEpics() {
+  const projects = await fetchProjects();
+  const projectsWithEpics = await Promise.all(projects.map(async (project) => {
+    const epics = await fetchEpicsForProject(project.id);
+    return {
+      projectId: project.id,
+      projectName: project.name,
+      epics,
+    };
+  }));
+  return projectsWithEpics;
+}
+
 
 export async function fetchChangesForIssue({ issueId }: { issueId: string }) {
   const response = await makeJiraRequest({

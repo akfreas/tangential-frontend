@@ -24,6 +24,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "http-proxy-agent": "^7.0.0",
+    "https-proxy-agent": "^7.0.2",
     "js-cookie": "^3.0.5",
     "kysely": "^0.26.3",
     "kysely-planetscale": "^1.4.0",
@@ -43,5 +44,13 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none"
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0"
+  },
+  "scripts": {
+    "postinstall": "patch-package",
+    "dev": "next dev"
   }
 }
