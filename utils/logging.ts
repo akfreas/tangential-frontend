@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 /* eslint-disable no-console */
-
 function areWeUsingCI(): boolean {
   return process.env.CI === 'true';
 }
