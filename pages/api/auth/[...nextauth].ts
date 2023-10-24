@@ -1,17 +1,23 @@
 import NextAuth, {
-  NextAuthOptions, JWT,
-  User, AdapterUser, Session } from 'next-auth';
+  NextAuthOptions, 
+  User, Session, Account, Profile, CallbacksOptions } from 'next-auth';
 import AtlassianProvider from 'next-auth/providers/atlassian';
 import { axiosInstance, jsonGet, jsonPost } from '../../../utils/request';
 import { httpAgent, httpsAgent } from '../../../config/config';
 import { doDebug, jsonLog } from '../../../utils/logging';
+import { AdapterUser } from 'next-auth/adapters';
+import { JWT } from 'next-auth/jwt';
 
-/**
- * Takes a token, and returns a new token with an updated
- * `accessToken`. If an error occurs,
- * returns the old token and an error property
- */
-async function refreshAtlassianAccessToken(token) {
+interface Token {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface RefreshedToken extends Token {
+  error?: string;
+}
+
+async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<AtlassianJWT> {
   try {
     const url = "https://auth.atlassian.com/oauth/token";
     const response = await axiosInstance.post(url, {
@@ -28,8 +34,13 @@ async function refreshAtlassianAccessToken(token) {
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error: unknown) { // specify the error type as 'unknown'
+    if (error instanceof Error) { // use a type guard to narrow down the type
+      console.log(error.message);
+    } else {
+      console.log("An unknown error occurred:", error);
+    }
+    
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -37,27 +48,31 @@ async function refreshAtlassianAccessToken(token) {
   }
 }
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    AtlassianProvider({
-      clientId: process.env.ATLASSIAN_CLIENT_ID!,
-      clientSecret: process.env.ATLASSIAN_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: "read:jira-work read:jira-user offline_access read:me"
-        }
-      }
-    }),
-  ],
-  callbacks: {
-    async jwt(params: { token: JWT, user?: User | AdapterUser, account?: { access_token: string }, profile?: any, trigger?: "signIn" | "signUp" | "update" }) {
+  interface AtlassianAccount extends Account {
+      access_token: string,
+    refresh_token: string,
+    expires_at: number
+  }
+
+  interface AtlassianJWT extends JWT {
+    accessToken: string,
+    refreshToken: string,
+    atlassianId: string,
+    accessTokenExpires: number,
+  }
+
+  interface MyCallbacksOptions<P = Profile> extends CallbacksOptions<P, AtlassianAccount> {
+    // You can override other methods if needed
+  }
+
+  const callbacks: MyCallbacksOptions = {
+    jwt: async (params: { token: AtlassianJWT, user: User | AdapterUser, account: AtlassianAccount | null, profile?: Profile, trigger?: "signIn" | "signUp" | "update" }) => {
       const { token, user, account, profile, trigger } = params;
       // Check if the jwt callback is invoked for sign-in or sign-up
       //TODO: handle refresh token
 
       if (trigger === 'signIn' || trigger === 'signUp') {
         if (account && profile) {
-          const id = profile.id;
           const {access_token, refresh_token, expires_at } = account;
           const resourceUrl = "https://api.atlassian.com/oauth/token/accessible-resources";
           const [{ id: atlassianId }] = await jsonGet({
@@ -81,7 +96,7 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    async session({ session, token, user }) {
+    session: async (params: { session: Session, token: AtlassianJWT, user: User }) {
       session.accessToken = token.accessToken;
       session.atlassianId = token.atlassianId;
       session.refreshToken = token.refreshToken;
@@ -89,6 +104,30 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
+    signIn: async (params) => {
+      doDebug("signIn", params);
+      return true;
+    },
+    redirect: async (params: {url: string, baseUrl: string}) => {
+      const { baseUrl } = params;
+      return baseUrl;
+    }
+  }
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    AtlassianProvider({
+      clientId: process.env.ATLASSIAN_CLIENT_ID!,
+      clientSecret: process.env.ATLASSIAN_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "read:jira-work read:jira-user offline_access read:me"
+        }
+      }
+    }),
+  ],
+  callbacks: {
+    
   },
 };
 

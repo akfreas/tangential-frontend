@@ -47,7 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Note: Adjusted to handle binary data correctly
     const { data, headers } = await makeAtlassianAuthenticatedRequest(
       { url, method: 'get', responseType: 'arraybuffer' }, req, res
     );
@@ -57,10 +56,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.writeHead(200, filteredHeaders);
     res.end(data);
     return;
-  } catch (error) {
-    doError("Error fetching", error);
-    res.status(500).json({ error: 'Failed to fetch image' });
-    return;
+  } catch (error: unknown) { // specify the error type as 'unknown'
+    if (error instanceof Error) { // use a type guard to narrow down the type
+      doError("Error fetching", error);
+    } else {
+      throw error;
+    }
+    res.status(500).json({ error: 'Failed to fetch data from atlassian'});
+      return;
   }
 }
 

@@ -1,6 +1,16 @@
 export class TangentialHTTPRequestError extends Error {
-  // eslint-disable-next-line no-restricted-syntax
-  constructor(message, requestError, url, params, headers) {
+  requestError: Error;
+  url: string;
+  params: Record<string, any>;
+  headers: Record<string, string>;
+
+  constructor(
+    message: string,
+    requestError: Error,
+    url: string,
+    params: Record<string, any>,
+    headers: Record<string, string>
+  ) {
     super(message);
     this.requestError = requestError;
     this.url = url;

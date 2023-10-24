@@ -7,7 +7,7 @@ import { jsonLog } from "./logging";
 interface AtlassianAuthenticatedRequestOptions {
   url: string;
   method: string;
-  body: any;
+  body?: any;
   responseType: string;
 }
 
