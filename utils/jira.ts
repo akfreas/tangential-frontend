@@ -1,14 +1,14 @@
 import { GetServerSidePropsContext, Metadata, NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../pages/api/auth/[...nextauth]"
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 import { axiosInstance, jsonGet } from "./request";
-import { jsonLog } from "./logging";
+import { ResponseType } from "axios"; // import ResponseType from axios
 
 interface AtlassianAuthenticatedRequestOptions {
   url: string;
   method: string;
   body?: any;
-  responseType: string;
+  responseType: ResponseType;
 }
 
 interface JiraRequestOptions {
@@ -27,8 +27,7 @@ export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePr
 }
 
 export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthenticatedRequestOptions, req: NextApiRequest, res: NextApiResponse): Promise<any> {
-
-  const session: Session | null = await auth(req, res);  // pass req and res
+  const session: Session | null = await auth(req, res); // pass req and res
   if (session === null) {
     throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed");
   } 
@@ -79,14 +78,14 @@ async function fetchProjects() {
 }
 
 // Fetches the list of epics for a given project
-async function fetchEpicsForProject(projectId) {
+async function fetchEpicsForProject(projectId: string) {
   const response = await makeJiraRequest({
     path: `search?jql=project=${projectId} AND issuetype=Epic`,
     method: "GET",
     body: null,
   });
   const { issues } = response;
-  const epicsWithChanges = await Promise.all(issues.map(async (epic) => {
+  const epicsWithChanges = await Promise.all(issues.map(async (epic: any) => {
     const changes = await fetchChangesForIssue({ issueId: epic.id });
     return { ...epic, changes };
   }));
@@ -96,7 +95,7 @@ async function fetchEpicsForProject(projectId) {
 // Main function to fetch projects and their epics
 export async function fetchProjectsAndEpics() {
   const projects = await fetchProjects();
-  const projectsWithEpics = await Promise.all(projects.map(async (project) => {
+  const projectsWithEpics = await Promise.all(projects.map(async (project: any) => {
     const epics = await fetchEpicsForProject(project.id);
     return {
       id: project.id,

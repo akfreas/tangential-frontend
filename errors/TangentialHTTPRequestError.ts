@@ -2,14 +2,14 @@ export class TangentialHTTPRequestError extends Error {
   requestError: Error;
   url: string;
   params: Record<string, any>;
-  headers: Record<string, string>;
+  headers?: Record<string, string>;
 
   constructor(
     message: string,
     requestError: Error,
     url: string,
     params: Record<string, any>,
-    headers: Record<string, string>
+    headers?: any
   ) {
     super(message);
     this.requestError = requestError;

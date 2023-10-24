@@ -48,12 +48,6 @@ async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<Atlassi
   }
 }
 
-  interface AtlassianAccount extends Account {
-      access_token: string,
-    refresh_token: string,
-    expires_at: number
-  }
-
   interface AtlassianJWT extends JWT {
     accessToken: string,
     refreshToken: string,
@@ -61,12 +55,20 @@ async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<Atlassi
     accessTokenExpires: number,
   }
 
-  interface MyCallbacksOptions<P = Profile> extends CallbacksOptions<P, AtlassianAccount> {
-    // You can override other methods if needed
-  }
-
-  const callbacks: MyCallbacksOptions = {
-    jwt: async (params: { token: AtlassianJWT, user: User | AdapterUser, account: AtlassianAccount | null, profile?: Profile, trigger?: "signIn" | "signUp" | "update" }) => {
+export const authOptions: NextAuthOptions = {
+  providers: [
+    AtlassianProvider({
+      clientId: process.env.ATLASSIAN_CLIENT_ID!,
+      clientSecret: process.env.ATLASSIAN_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "read:jira-work read:jira-user offline_access read:me"
+        }
+      }
+    }),
+  ],
+  callbacks: {
+    async jwt(params) {
       const { token, user, account, profile, trigger } = params;
       // Check if the jwt callback is invoked for sign-in or sign-up
       //TODO: handle refresh token
@@ -84,50 +86,17 @@ async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<Atlassi
           token.accessToken = access_token;
           token.refreshToken = refresh_token;
           token.atlassianId = atlassianId;
-          token.accessTokenExpires = expires_at * 1000;
+          token.accessTokenExpires = expires_at ? expires_at * 1000 : undefined;
         }
       }
 
       // If the token has expired, refresh it
-      if (token.accessToken && Date.now() > token.accessTokenExpires) {
+      if (token.accessToken && typeof token.accessTokenExpires === 'number' && Date.now() > token.accessTokenExpires) {
         doDebug("Refreshing access token because it has expired", token.accessTokenExpires, Date.now(), Date.now() > token.accessTokenExpires ? "expired" : "not expired");
-        return refreshAtlassianAccessToken(token);
+        return refreshAtlassianAccessToken(token as AtlassianJWT);
       }
-
       return token;
     },
-    session: async (params: { session: Session, token: AtlassianJWT, user: User }) {
-      session.accessToken = token.accessToken;
-      session.atlassianId = token.atlassianId;
-      session.refreshToken = token.refreshToken;
-      session.accessTokenExpires = token.accessTokenExpires;
-
-      return session;
-    },
-    signIn: async (params) => {
-      doDebug("signIn", params);
-      return true;
-    },
-    redirect: async (params: {url: string, baseUrl: string}) => {
-      const { baseUrl } = params;
-      return baseUrl;
-    }
-  }
-
-export const authOptions: NextAuthOptions = {
-  providers: [
-    AtlassianProvider({
-      clientId: process.env.ATLASSIAN_CLIENT_ID!,
-      clientSecret: process.env.ATLASSIAN_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: "read:jira-work read:jira-user offline_access read:me"
-        }
-      }
-    }),
-  ],
-  callbacks: {
-    
   },
 };
 

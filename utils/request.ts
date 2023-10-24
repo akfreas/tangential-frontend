@@ -43,7 +43,7 @@ export async function jsonPost({ url, headers = {}, ...params }: JsonPostParams)
     return Promise.resolve(response.data);
   } catch (error) {
     return processError({
-      method: 'post', url, params, error,
+      method: 'post', url, params, error: error as AxiosError<unknown, any>,
     });
   }
 }
@@ -66,30 +66,7 @@ export async function jsonGet({ url, ...params }: JsonGetParams): Promise<any> {
     return data;
   } catch (error) {
     return processError({
-      method: 'get', url, params, error,
+      method: 'get', url, params, error: error as AxiosError<unknown, any>,
     });
-  }
-}
-
-interface JsonPatchParams {
-  url: string;
-  data: any;
-  params?: any;
-  headers?: any;
-}
-
-export async function jsonPatch({ url, data, ...params }: JsonPatchParams): Promise<any> {
-  const px: AxiosRequestConfig = {
-    method: 'patch',
-    url,
-    data,
-    ...params,
-  };
-
-  try {
-    const response: AxiosResponse = await axiosInstance(px);
-    return response.data;
-  } catch (error) {
-    return Promise.reject(new TangentialHTTPRequestError('error patching', error, url, data, params));
   }
 }

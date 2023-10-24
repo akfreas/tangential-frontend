@@ -69,6 +69,6 @@ export function doError(message: string, error: Error, ...optionalParams: any[])
 }
 
 export function jsonLog(message: string, ...optionalParams: any[]): void {
-  consoleLog(message, JSON.stringify(...optionalParams, null, 2));
+  consoleLog(message, JSON.stringify(optionalParams, null, 2));
 }
 /* eslint-enable no-console */
