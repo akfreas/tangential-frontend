@@ -36,7 +36,7 @@
     "react-dom": "18.2.0",
     "server-only": "^0.0.1",
     "tailwindcss": "^3.3.3",
-    "typescript": "5.2.2"
+    "typescript": "^5.2.2"
   },
   "prettier": {
     "arrowParens": "always",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "postinstall-postinstall": "^2.1.0",
+    "serverless-plugin-typescript": "^2.1.5"
   }
 }
