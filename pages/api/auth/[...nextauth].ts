@@ -67,11 +67,12 @@ export const authOptions: NextAuthOptions = {
       }
     }),
   ],
+  debug: true,
   callbacks: {
     async jwt(params) {
-      const { token, user, account, profile, trigger } = params;
+      const { token, account, profile, trigger } = params;
       // Check if the jwt callback is invoked for sign-in or sign-up
-      //TODO: handle refresh token
+      //TODO: handle refresh Token
 
       if (trigger === 'signIn' || trigger === 'signUp') {
         if (account && profile) {
@@ -97,6 +98,16 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
+    async session(params) {
+      const { session, token } = params;
+      
+      session.accessToken = token.accessToken;
+      session.atlassianId = token.atlassianId;
+      session.refreshToken = token.refreshToken;
+      session.accessTokenExpires = token.accessTokenExpires;
+
+      return session;
+    }
   },
 };
 

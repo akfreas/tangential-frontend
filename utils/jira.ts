@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 import { axiosInstance, jsonGet } from "./request";
 import { ResponseType } from "axios"; // import ResponseType from axios
+import { doError, jsonLog } from "./logging";
 
 interface AtlassianAuthenticatedRequestOptions {
   url: string;
@@ -27,10 +28,11 @@ export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePr
 }
 
 export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthenticatedRequestOptions, req: NextApiRequest, res: NextApiResponse): Promise<any> {
+
   const session: Session | null = await auth(req, res); // pass req and res
   if (session === null) {
-    throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed");
-  } 
+    throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
+  }
   const { accessToken } = session;
 
   const response = await axiosInstance(options.url,
