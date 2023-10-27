@@ -14,8 +14,6 @@ if (process.env.LOCAL_HTTP_PROXY) {
   httpsInstance = new HttpsProxyAgent(process.env.LOCAL_HTTP_PROXY);
   httpInstance = new HttpProxyAgent(process.env.LOCAL_HTTP_PROXY);
   const config = { ...configInfo, httpOptions: { agent: httpsInstance } };
-} else if (process.env.IS_OFFLINE) {
-  httpInstance = new http.Agent();
 }
 
 export const httpsAgent = httpsInstance;
