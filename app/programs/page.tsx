@@ -32,7 +32,7 @@ export default async function ProgramsPage() {
               {data.map((project, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                  <img src={`https://tangential.eu.ngrok.io/api/atlassianProxy?url=${project.avatar}`} 
+                  <img src={`${process.env.DEPLOYMENT_URL}/api/atlassianProxy?url=${project.avatar}`} 
                         width="50" 
                         height="50" 
                         alt={project}

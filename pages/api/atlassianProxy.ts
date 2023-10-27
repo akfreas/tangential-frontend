@@ -26,7 +26,6 @@ function filterHeaders(headers: IncomingHttpHeaders) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { url } = req.query;
-  doDebug("Proxying atlassian request", req.headers)
 
   if (typeof url !== 'string') {
     res.status(400).json({ error: 'URL is required' });
@@ -50,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data, headers } = await makeAtlassianAuthenticatedRequest(
       { url, method: 'get', responseType: 'arraybuffer' }, req, res
     );
-    jsonLog("Response from atlassian", headers);
 
     const filteredHeaders = filterHeaders(headers);
     res.writeHead(200, filteredHeaders);
