@@ -17,6 +17,13 @@ interface RefreshedToken extends Token {
   error?: string;
 }
 
+export interface AtlassianSession extends Session {
+  accessToken: string;
+  atlassianId: string;
+  refreshToken: string;
+  accessTokenExpires?: number;
+}
+
 async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<AtlassianJWT> {
   try {
     const url = "https://auth.atlassian.com/oauth/token";
@@ -99,14 +106,16 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session(params) {
-      const { session, token } = params;
-      
+
+      const { session: s, token: t } = params;
+      const token: AtlassianJWT = t as AtlassianJWT;
+      const session: AtlassianSession = s as AtlassianSession;
       session.accessToken = token.accessToken;
       session.atlassianId = token.atlassianId;
       session.refreshToken = token.refreshToken;
       session.accessTokenExpires = token.accessTokenExpires;
 
-      return session;
+      return session as AtlassianSession;
     }
   },
 };

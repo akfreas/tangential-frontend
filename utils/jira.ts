@@ -1,9 +1,9 @@
 import { GetServerSidePropsContext, Metadata, NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
+import { AtlassianSession, authOptions } from "../pages/api/auth/[...nextauth]";
 import { axiosInstance, jsonGet } from "./request";
 import { ResponseType } from "axios"; // import ResponseType from axios
-import { doError, jsonLog } from "./logging";
+
 
 interface AtlassianAuthenticatedRequestOptions {
   url: string;
@@ -23,7 +23,7 @@ interface Session {
   atlassianId: string;
 }
 
-export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]] | [NextApiRequest, NextApiResponse] | []): Promise<Session | null> {
+export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]] | [NextApiRequest, NextApiResponse] | []): Promise<AtlassianSession | null> {
   return getServerSession(...args, authOptions)
 }
 

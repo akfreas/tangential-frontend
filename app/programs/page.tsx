@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 
 import Image from 'next/image';
 import { jsonGet } from "../../utils/request";
+export const dynamic = 'force-dynamic';
 
 export default async function ProgramsPage() {
   try {
