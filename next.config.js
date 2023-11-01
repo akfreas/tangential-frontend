@@ -9,7 +9,7 @@ const nextConfig = {
       'tangential.eu.ngrok.io',
       'dev.tangential.app'
     ]
-  },
+  }
 };
 
 module.exports = nextConfig;

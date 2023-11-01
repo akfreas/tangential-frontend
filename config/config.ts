@@ -1,13 +1,16 @@
 import * as https from 'https';
 import * as http from 'http';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import { HttpProxyAgent} from 'http-proxy-agent';
+import { HttpProxyAgent } from 'http-proxy-agent';
+import { SQSClient } from "@aws-sdk/client-sqs";
 
 let agent: https.Agent;
 const configInfo = { region: process.env.awsRegion };
 
 let httpsInstance: https.Agent = new https.Agent();
 let httpInstance: http.Agent = new http.Agent();
+
+
 
 if (process.env.LOCAL_HTTP_PROXY) {
   console.log("Using proxy: " + process.env.LOCAL_HTTP_PROXY)

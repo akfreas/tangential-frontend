@@ -10,23 +10,28 @@ export default async function IndexPage({
 }: {
   searchParams: { q: string };
 }) {
+
+  try {
   const search = searchParams.q ?? '';
   const users = await queryBuilder
     .selectFrom('users')
     .select(['id', 'name', 'username', 'email'])
     .where('name', 'like', `%${search}%`)
     .execute();
-
-  return (
-    <main className="p-4 md:p-10 mx-auto max-w-7xl">
-      <Title>Users</Title>
-      <Text>
-        A list of users retrieved from a MySQL database (PlanetScale).
-      </Text>
-      <Search />
-      <Card className="mt-6">
-        <UsersTable users={users} />
-      </Card>
-    </main>
-  );
+    return (
+      <main className="p-4 md:p-10 mx-auto max-w-7xl">
+        <Title>Users</Title>
+        <Text>
+          A list of users retrieved from a MySQL database (PlanetScale).
+        </Text>
+        <Search />
+        <Card className="mt-6">
+          <UsersTable users={users} />
+        </Card>
+      </main>
+    );
+  } catch (error) { 
+    console.error(error);
+  }
+  
 }

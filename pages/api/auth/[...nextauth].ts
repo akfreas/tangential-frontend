@@ -1,10 +1,11 @@
 import NextAuth, {
-  NextAuthOptions, 
-  User, Session, Account, Profile, CallbacksOptions } from 'next-auth';
+  NextAuthOptions,
+  User, Session, Account, Profile, CallbacksOptions
+} from 'next-auth';
 import AtlassianProvider from 'next-auth/providers/atlassian';
 import { axiosInstance, jsonGet, jsonPost } from '../../../utils/request';
 import { httpAgent, httpsAgent } from '../../../config/config';
-import { doDebug, jsonLog } from '../../../utils/logging';
+import { doDebug, doLog, jsonLog } from '../../../utils/logging';
 import { AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
 
@@ -24,43 +25,65 @@ export interface AtlassianSession extends Session {
   accessTokenExpires?: number;
 }
 
+let refreshPromise: Promise<AtlassianJWT> | null = null;
+
 async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<AtlassianJWT> {
-  try {
-    const url = "https://auth.atlassian.com/oauth/token";
-    const response = await axiosInstance.post(url, {
-      grant_type: 'refresh_token',
-      client_id: process.env.ATLASSIAN_CLIENT_ID,
-      client_secret: process.env.ATLASSIAN_CLIENT_SECRET,
-      refresh_token: token.refreshToken,
-    });
-
-    const refreshedTokens = response.data;
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    };
-  } catch (error: unknown) { // specify the error type as 'unknown'
-    if (error instanceof Error) { // use a type guard to narrow down the type
-      console.log(error.message);
-    } else {
-      console.log("An unknown error occurred:", error);
-    }
-    
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
+  if (refreshPromise) {
+    return await refreshPromise;
   }
+
+  refreshPromise = new Promise<AtlassianJWT>(async (resolve, reject) => {
+    try {
+      const url = "https://auth.atlassian.com/oauth/token";
+      const response = await axiosInstance.post(url, {
+        grant_type: 'refresh_token',
+        client_id: process.env.ATLASSIAN_CLIENT_ID,
+        client_secret: process.env.ATLASSIAN_CLIENT_SECRET,
+        refresh_token: token.refreshToken,
+      });
+
+      const refreshedTokens = response.data;
+
+      if (!refreshedTokens.access_token) {
+        throw new Error('RefreshAccessTokenError: No access token in refresh response');
+      }
+
+      if (!refreshedTokens.refresh_token) {
+        throw new Error('RefreshAccessTokenError: No refresh token in refresh response');
+      }
+
+      const refreshedToken: AtlassianJWT = {
+        ...token,
+        accessToken: refreshedTokens.access_token,
+        refreshToken: refreshedTokens.refresh_token,
+      };
+      doLog("refreshToken in refreshAtlassianAccessToken", refreshedToken.refreshToken)
+      resolve(refreshedToken);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      } else {
+        console.log("An unknown error occurred:", error);
+      }
+
+      reject({
+        ...token,
+        error: "RefreshAccessTokenError",
+      });
+    } finally {
+      refreshPromise = null;
+    }
+  });
+
+  return await refreshPromise;
 }
 
-  interface AtlassianJWT extends JWT {
-    accessToken: string,
-    refreshToken: string,
-    atlassianId: string,
-    accessTokenExpires: number,
-  }
+interface AtlassianJWT extends JWT {
+  accessToken: string,
+  refreshToken: string,
+  atlassianId: string,
+  accessTokenExpires: number,
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -83,7 +106,7 @@ export const authOptions: NextAuthOptions = {
 
       if (trigger === 'signIn' || trigger === 'signUp') {
         if (account && profile) {
-          const {access_token, refresh_token, expires_at } = account;
+          const { access_token, refresh_token, expires_at } = account;
           const resourceUrl = "https://api.atlassian.com/oauth/token/accessible-resources";
           const [{ id: atlassianId }] = await jsonGet({
             url: resourceUrl,
@@ -113,6 +136,7 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken;
       session.atlassianId = token.atlassianId;
       session.refreshToken = token.refreshToken;
+      doLog("refreshToken in session", token.refreshToken);
       session.accessTokenExpires = token.accessTokenExpires;
 
       return session as AtlassianSession;

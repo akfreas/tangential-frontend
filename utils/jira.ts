@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { AtlassianSession, authOptions } from "../pages/api/auth/[...nextauth]";
 import { axiosInstance, jsonGet } from "./request";
 import { ResponseType } from "axios"; // import ResponseType from axios
+import { jsonLog } from "./logging";
+import { auth } from "./auth";
 
 
 interface AtlassianAuthenticatedRequestOptions {
@@ -23,10 +25,6 @@ interface Session {
   atlassianId: string;
 }
 
-export function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]] | [NextApiRequest, NextApiResponse] | []): Promise<AtlassianSession | null> {
-  return getServerSession(...args, authOptions)
-}
-
 export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthenticatedRequestOptions, req: NextApiRequest, res: NextApiResponse): Promise<any> {
 
   const session: Session | null = await auth(req, res); // pass req and res
@@ -37,13 +35,12 @@ export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthen
 
   const response = await axiosInstance(options.url,
     {
-    responseType: options.responseType,
-    method: options.method,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  // jsonLog("Response from atlassian", response)
+      responseType: options.responseType,
+      method: options.method,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   return response;
 }
 
@@ -51,7 +48,7 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
   const session: Session | null = await auth();
   if (session === null) {
     throw new Error("makeJiraRequest: Authentication failed");
-  } 
+  }
 
   const { accessToken, atlassianId } = session;
 
@@ -59,11 +56,11 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
 
   const response = await axiosInstance(url,
     {
-    method: options.method,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+      method: options.method,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
 
   return response.data;
