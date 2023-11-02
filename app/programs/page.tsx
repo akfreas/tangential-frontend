@@ -40,7 +40,7 @@ export default async function ProgramsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {report.map((project, index) => [
+              {report?.map((project, index) => [
                 <ProjectRow project={project} key={index} />
               ])}
             </TableBody>

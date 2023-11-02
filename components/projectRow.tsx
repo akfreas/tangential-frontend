@@ -1,7 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 import { ProjectReport } from '@akfreas/tangential-core';
-import { Badge, TableCell, TableHeaderCell, TableRow } from '@tremor/react';
+import {
+  Badge,
+  Bold,
+  TableCell,
+  TableHeaderCell,
+  TableRow
+} from '@tremor/react';
 import { jsonLog } from '../utils/logging';
 
 export default function ProjectRow({ project }: { project: ProjectReport }) {
@@ -10,8 +16,6 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
   const toggleEpics = () => {
     setAreEpicsVisible(!areEpicsVisible);
   };
-
-  jsonLog(project.epics);
 
   return [
     <TableRow key={project.projectKey} onClick={toggleEpics}>
@@ -26,9 +30,9 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
       </TableCell>
       <TableCell>
         <p>
-          {project.name}
+          <Bold>{project.name}</Bold>
           <br />
-          {project.projectKey}
+          {project.lead.displayName}
           <br />
         </p>
       </TableCell>
@@ -55,10 +59,10 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             <p>{epic.summary}</p>
           </TableCell>
           <TableCell>
-            <Badge>{epic.statusName}</Badge>
+            <Badge>{epic.status}</Badge>
           </TableCell>
           <TableCell>
-            <p>{epic.summaryStatus}</p>
+            <p>{epic.generatedSummary}</p>
           </TableCell>
           <TableCell>
             <p>{epic.velocity}</p>

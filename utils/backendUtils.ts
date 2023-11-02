@@ -5,6 +5,7 @@ import { auth } from "./auth";
 import { jsonLog } from "./logging";
 import { json } from "stream/consumers";
 import { getSession } from "next-auth/react";
+import { AtlassianSession } from "../pages/api/auth/[...nextauth]";
 interface BackendAuthenticatedRequestOptions {
   path: string;
   method: string;
@@ -14,7 +15,7 @@ interface BackendAuthenticatedRequestOptions {
 
 export async function makeBackendAuthenticatedRequest(options: BackendAuthenticatedRequestOptions): Promise<any> {
 
-  const session: Session | null = await auth(); // pass req and res
+  const session: AtlassianSession | null = await auth(); // pass req and res
   if (session === null) {
     throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
   }

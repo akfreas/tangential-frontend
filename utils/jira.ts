@@ -45,7 +45,7 @@ export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthen
 }
 
 async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
-  const session: Session | null = await auth();
+  const session: AtlassianSession | null = await auth();
   if (session === null) {
     throw new Error("makeJiraRequest: Authentication failed");
   }

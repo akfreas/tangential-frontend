@@ -26,7 +26,6 @@ export default async function RootLayout({
         </Suspense>
         <NextAuthProvider>{children}</NextAuthProvider>
         <Analytics />
-        <Toast />
       </body>
     </html>
   );
