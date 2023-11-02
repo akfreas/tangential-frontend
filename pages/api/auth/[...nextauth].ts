@@ -57,7 +57,6 @@ async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<Atlassi
         accessToken: refreshedTokens.access_token,
         refreshToken: refreshedTokens.refresh_token,
       };
-      doLog("refreshToken in refreshAtlassianAccessToken", refreshedToken.refreshToken)
       resolve(refreshedToken);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -97,7 +96,6 @@ export const authOptions: NextAuthOptions = {
       }
     }),
   ],
-  debug: true,
   callbacks: {
     async jwt(params) {
       const { token, account, profile, trigger } = params;
@@ -136,7 +134,6 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken;
       session.atlassianId = token.atlassianId;
       session.refreshToken = token.refreshToken;
-      doLog("refreshToken in session", token.refreshToken);
       session.accessTokenExpires = token.accessTokenExpires;
 
       return session as AtlassianSession;

@@ -9,10 +9,9 @@ interface BackendAuthenticatedRequestOptions {
   path: string;
   method: string;
   body?: any;
-  responseType: ResponseType;
 }
 
-const baseBackendUrl = "http://localhost:3001"
+
 export async function makeBackendAuthenticatedRequest(options: BackendAuthenticatedRequestOptions): Promise<any> {
 
   const session: Session | null = await auth(); // pass req and res
@@ -21,11 +20,10 @@ export async function makeBackendAuthenticatedRequest(options: BackendAuthentica
   }
   const { accessToken, atlassianId } = session;
 
-  const url = `${baseBackendUrl}/${options.path}`
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/${options.path}`
 
   const response = await axiosInstance(url,
     {
-      responseType: options.responseType,
       method: options.method,
       headers: {
         'x-atlassian-token': accessToken,

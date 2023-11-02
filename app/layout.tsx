@@ -4,6 +4,8 @@ import { Analytics } from '@vercel/analytics/react';
 import Nav from './nav';
 import Toast from './toast';
 import { Suspense } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import { NextAuthProvider } from '../components/nextAuthProvider';
 
 export const metadata = {
   title: 'Tangential',
@@ -22,7 +24,7 @@ export default async function RootLayout({
         <Suspense>
           <Nav />
         </Suspense>
-        {children}
+        <NextAuthProvider>{children}</NextAuthProvider>
         <Analytics />
         <Toast />
       </body>
