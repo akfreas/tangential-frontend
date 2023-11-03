@@ -8,15 +8,14 @@ import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Program View', href: '/programs' },
+  { name: 'Planning', href: '/planning' },
+  { name: 'Program View', href: '/' },
   { name: 'Reports', href: '/reports' }
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
-import logo from '/images/logo-no-background.png';
 
 export default function Navbar({ user }: { user: any }) {
   const pathname = usePathname();

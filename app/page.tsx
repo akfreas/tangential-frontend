@@ -1,37 +1,55 @@
-import { Card, Title, Text } from '@tremor/react';
-import { queryBuilder } from '../lib/planetscale';
-import Search from './search';
-import UsersTable from './table';
+import React, { useEffect, useState } from 'react';
+import {
+  Badge,
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Title
+} from '@tremor/react';
+import { jsonLog } from '../utils/logging';
+import { redirect } from 'next/navigation';
 
+import { fetchAllProjectReports } from '../utils/analysisAccess';
+import ProgramsHeader from '../components/programHeader';
+import { SessionProvider } from 'next-auth/react';
+import ProjectRow from '../components/projectRow';
 export const dynamic = 'force-dynamic';
 
-export default async function IndexPage({
-  searchParams
-}: {
-  searchParams: { q: string };
-}) {
-
+export default async function ProgramsPage() {
   try {
-  const search = searchParams.q ?? '';
-  const users = await queryBuilder
-    .selectFrom('users')
-    .select(['id', 'name', 'username', 'email'])
-    .where('name', 'like', `%${search}%`)
-    .execute();
+    const report = await fetchAllProjectReports();
+
     return (
       <main className="p-4 md:p-10 mx-auto max-w-7xl">
-        <Title>Users</Title>
-        <Text>
-          A list of users retrieved from a MySQL database (PlanetScale).
-        </Text>
-        <Search />
-        <Card className="mt-6">
-          <UsersTable users={users} />
+        <Card>
+          <ProgramsHeader />
+          <Table className="mt-5">
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Img</TableHeaderCell>
+                <TableHeaderCell>Program</TableHeaderCell>
+                <TableHeaderCell>Status</TableHeaderCell>
+                <TableHeaderCell></TableHeaderCell>
+                <TableHeaderCell>Velocity</TableHeaderCell>
+                <TableHeaderCell>Life Cycle</TableHeaderCell>
+                <TableHeaderCell>Due Date</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {report?.map((project, index) => [
+                <ProjectRow project={project} key={index} />
+              ])}
+            </TableBody>
+          </Table>
         </Card>
       </main>
     );
-  } catch (error) { 
+  } catch (error) {
     console.error(error);
+    return redirect('/');
   }
-  
 }
