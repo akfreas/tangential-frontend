@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.0.18",
     "@planetscale/database": "^1.11.0",
     "@tremor/react": "^3.6.6",
+    "@types/": "akfreas/tangential-core",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "20.5.6",
     "@types/react": "18.2.21",
