@@ -6,7 +6,7 @@
     "dev": "next dev"
   },
   "dependencies": {
-    "@akfreas/tangential-core": "^1.0.0",
+    "@akfreas/tangential-core": "^0.0.5",
     "@aws-sdk/client-secrets-manager": "^3.431.0",
     "@aws-sdk/node-http-handler": "^3.374.0",
     "@headlessui/react": "^1.7.17",
