@@ -30,7 +30,7 @@ export default async function ProgramsPage() {
           <Table className="mt-5">
             <TableHead>
               <TableRow>
-                <TableHeaderCell>Img</TableHeaderCell>
+                <TableHeaderCell>&nbsp;</TableHeaderCell>
                 <TableHeaderCell>Program</TableHeaderCell>
                 <TableHeaderCell>Status</TableHeaderCell>
                 <TableHeaderCell></TableHeaderCell>
