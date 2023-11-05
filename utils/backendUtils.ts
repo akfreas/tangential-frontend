@@ -2,7 +2,6 @@ import { Session } from "next-auth";
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import { axiosInstance } from "./request";
 import { auth } from "./auth";
-import { jsonLog } from "./logging";
 import { json } from "stream/consumers";
 import { getSession } from "next-auth/react";
 import { AtlassianSession } from "../pages/api/auth/[...nextauth]";

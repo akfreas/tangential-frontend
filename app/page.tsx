@@ -10,7 +10,6 @@ import {
   TableRow,
   Title
 } from '@tremor/react';
-import { jsonLog } from '../utils/logging';
 import { redirect } from 'next/navigation';
 
 import { fetchAllProjectReports } from '../utils/analysisAccess';

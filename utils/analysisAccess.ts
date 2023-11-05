@@ -1,11 +1,9 @@
-import MongoDBWrapper from "./databaseWrapper";
-import { ProjectReport } from "@akfreas/tangential-core";
-import { doLog, jsonLog } from "./logging";
+import { ProjectReport, MongoDBWrapper, doLog } from "@akfreas/tangential-core";
 import { report } from "process";
 
 export async function fetchAllProjectReports(): Promise<ProjectReport[] | null> {
   try {
-    const dbWrapper = await MongoDBWrapper.getInstance();
+    const dbWrapper = await MongoDBWrapper.getInstance(process.env.MONGODB_URI, process.env.MONGODB_DATABASE);
     const reportsCollection = dbWrapper.getCollection<ProjectReport>('reports');
     // Fetching all reports from the database
     const reportsArray = await reportsCollection.find().toArray();

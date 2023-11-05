@@ -5,7 +5,7 @@ import NextAuth, {
 import AtlassianProvider from 'next-auth/providers/atlassian';
 import { axiosInstance, jsonGet, jsonPost } from '../../../utils/request';
 import { httpAgent, httpsAgent } from '../../../config/config';
-import { doDebug, doLog, jsonLog } from '../../../utils/logging';
+import { doDebug, doLog, jsonLog } from '@akfreas/tangential-core';
 import { AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
 

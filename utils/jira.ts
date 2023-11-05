@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { AtlassianSession, authOptions } from "../pages/api/auth/[...nextauth]";
 import { axiosInstance, jsonGet } from "./request";
 import { ResponseType } from "axios"; // import ResponseType from axios
-import { jsonLog } from "./logging";
 import { auth } from "./auth";
 
 

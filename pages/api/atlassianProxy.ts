@@ -3,9 +3,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { axiosInstance } from '../../utils/request';
 import { makeAtlassianAuthenticatedRequest } from '../../utils/jira';
-import { doDebug, doError, jsonLog } from '../../utils/logging';
 import { IncomingHttpHeaders } from 'http';
-import axios from 'axios';
+import { doError } from '@akfreas/tangential-core';
 
 // List of allowed domains
 const allowedDomains: string[] = ['api.atlassian.com'];
@@ -60,8 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
       throw error;
     }
-    res.status(500).json({ error: 'Failed to fetch data from atlassian'});
-      return;
+    res.status(500).json({ error: 'Failed to fetch data from atlassian' });
+    return;
   }
 }
 

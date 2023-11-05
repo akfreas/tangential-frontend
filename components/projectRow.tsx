@@ -8,7 +8,6 @@ import {
   TableHeaderCell,
   TableRow
 } from '@tremor/react';
-import { jsonLog } from '../utils/logging';
 
 export default function ProjectRow({ project }: { project: ProjectReport }) {
   const [areEpicsVisible, setAreEpicsVisible] = useState(false);
