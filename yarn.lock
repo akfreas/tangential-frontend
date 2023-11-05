@@ -7,10 +7,10 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@akfreas/tangential-core@^1.0.1":
-  version "1.0.1"
-  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.1/c684e570aedd84889cc6f04f5dc4a6e7977236b8#c684e570aedd84889cc6f04f5dc4a6e7977236b8"
-  integrity sha512-JCTRlvFJJUgBLSmIrZMV5ZYtgdMvWxQZiNTnKS4gbfOrYqpozOcNvhcIDNZFGS+foUPhEP2xRVt3zHE7jZHXlA==
+"@akfreas/tangential-core@^1.0.2":
+  version "1.0.2"
+  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.2/eddef53cfa46795980a2800168bedd95c9f18c53#eddef53cfa46795980a2800168bedd95c9f18c53"
+  integrity sha512-0hjk5nWccxMyaY/Q2qodj/1q3jIY1X67xzlKM1BSfmvkZbv3IAiQXfKnucWXrzqMYQbv3waMWS5mxZalb5N2cA==
   dependencies:
     mongodb "^6.2.0"
 
