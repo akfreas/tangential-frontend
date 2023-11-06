@@ -6,6 +6,7 @@ import Toast from './toast';
 import { Suspense } from 'react';
 import { SessionProvider } from 'next-auth/react';
 import { NextAuthProvider } from '../components/nextAuthProvider';
+import { LoginWrapped } from '../components/loginWrapped';
 
 export const metadata = {
   title: 'Tangential',
@@ -24,7 +25,9 @@ export default async function RootLayout({
         <Suspense>
           <Nav />
         </Suspense>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          <LoginWrapped>{children}</LoginWrapped>
+        </NextAuthProvider>
         <Analytics />
       </body>
     </html>

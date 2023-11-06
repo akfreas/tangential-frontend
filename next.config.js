@@ -1,5 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack: (config, { isServer }) => {
+    // This will overwrite the default option for `.node`
+
+    if (!isServer) {
+      // Replace MongoDB module with a dummy module on client-side
+      config.resolve.alias['mongodb'] = false;
+    }
+
+    // Important: return the modified config
+    return config;
+  },
+
   images: {
     domains: [
       'avatars.githubusercontent.com',

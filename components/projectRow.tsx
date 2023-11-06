@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { ProjectReport } from '@akfreas/tangential-core';
+import { ProjectReport, jsonLog } from '@akfreas/tangential-core';
 import {
   Badge,
   Bold,
@@ -16,11 +16,13 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
     setAreEpicsVisible(!areEpicsVisible);
   };
 
+  jsonLog('process.env', process.env);
+
   return [
     <TableRow key={project.projectKey} onClick={toggleEpics}>
       <TableCell>
         <img
-          src={`${process.env.DEPLOYMENT_URL}/api/atlassianProxy?url=${project.avatar}`}
+          src={`${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}/api/atlassianProxy?url=${project.avatar}`}
           width="50"
           height="50"
           alt={project.projectKey}

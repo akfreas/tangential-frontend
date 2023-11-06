@@ -1,7 +1,7 @@
-import * as https from 'https';
 import * as http from 'http';
-import { HttpsProxyAgent } from 'https-proxy-agent';
 import { HttpProxyAgent } from 'http-proxy-agent';
+import * as https from 'https';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 let agent: https.Agent;
 const configInfo = { region: process.env.awsRegion };

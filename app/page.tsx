@@ -18,7 +18,7 @@ import { SessionProvider } from 'next-auth/react';
 import ProjectRow from '../components/projectRow';
 export const dynamic = 'force-dynamic';
 
-export default async function ProgramsPage() {
+export default async function ProgramsPage({}) {
   try {
     const report = await fetchAllProjectReports();
 
