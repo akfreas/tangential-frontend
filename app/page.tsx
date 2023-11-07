@@ -35,7 +35,7 @@ export default async function ProgramsPage({}) {
                 <TableHeaderCell></TableHeaderCell>
                 <TableHeaderCell>Velocity</TableHeaderCell>
                 <TableHeaderCell>Life Cycle</TableHeaderCell>
-                <TableHeaderCell>Due Date</TableHeaderCell>
+                <TableHeaderCell>Predicted End Date</TableHeaderCell>
               </TableRow>
             </TableHead>
             <TableBody>

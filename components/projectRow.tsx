@@ -16,8 +16,6 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
     setAreEpicsVisible(!areEpicsVisible);
   };
 
-  jsonLog('process.env', process.env);
-
   return [
     <TableRow key={project.projectKey} onClick={toggleEpics}>
       <TableCell>
@@ -38,13 +36,18 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
         </p>
       </TableCell>
       <TableCell>
-        <Badge>{project.active ? 'Active' : 'Inactive'}</Badge>
+        {project.analysis !== undefined ? (
+          <Badge color={project.analysis?.state?.color}>
+            {project.analysis?.state?.name}
+          </Badge>
+        ) : null}
       </TableCell>
+
       <TableCell>
         <p>{project.summaryStatus}</p>
       </TableCell>
       <TableCell>
-        <p>{project.velocity}</p>
+        <p></p>
       </TableCell>
       <TableCell>
         <p></p>
@@ -60,16 +63,21 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             <p>{epic.summary}</p>
           </TableCell>
           <TableCell>
-            <Badge>{epic.status}</Badge>
+            <Badge color={epic.analysis?.state?.color}>
+              {epic.analysis?.state?.name}
+            </Badge>
           </TableCell>
           <TableCell>
             <p>{epic.generatedSummary}</p>
           </TableCell>
           <TableCell>
-            <p>{epic.velocity}</p>
+            <p></p>
           </TableCell>
           <TableCell>
             <p></p>
+          </TableCell>
+          <TableCell>
+            <p>{epic.analysis?.predictedEndDate}</p>
           </TableCell>
         </TableRow>
       ))
