@@ -84,7 +84,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             </p>}
           </TableCell>
           <TableCell>
-            <p>{epic.generatedSummary}</p>
+            <p></p>
           </TableCell>
           <TableCell>
             <p></p>
