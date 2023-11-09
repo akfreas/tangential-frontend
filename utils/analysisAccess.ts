@@ -8,8 +8,8 @@ export async function fetchAllProjectReports(): Promise<ProjectReport[] | null> 
     // Fetching all reports from the database
     const reportsArray = await reportsCollection.find().toArray();
     if (!reportsArray || reportsArray.length === 0) {
-      console.log('No reports found.');
-      return null;
+      doLog('No reports found.');
+      return [];
     }
 
     // let mappedReports: any = {};
@@ -17,7 +17,6 @@ export async function fetchAllProjectReports(): Promise<ProjectReport[] | null> 
     //   mappedReports[report.projectKey] = report;
     // })
 
-    console.log('Successfully fetched all project reports.');
     return reportsArray;
   } catch (error) {
     doLog(`Failed to fetch reports: ${error}`);

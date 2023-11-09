@@ -4,10 +4,12 @@ import { ProjectReport, jsonLog } from '@akfreas/tangential-core';
 import {
   Badge,
   Bold,
+  CategoryBar,
   TableCell,
   TableHeaderCell,
   TableRow
 } from '@tremor/react';
+import ItemCategoryBar from './itemCategoryBar';
 
 export default function ProjectRow({ project }: { project: ProjectReport }) {
   const [areEpicsVisible, setAreEpicsVisible] = useState(false);
@@ -35,19 +37,24 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           <br />
         </p>
       </TableCell>
-      <TableCell>
+      <TableCell width={100} className="flex justify-center items-center">
         {project.analysis !== undefined ? (
           <Badge color={project.analysis?.state?.color}>
             {project.analysis?.state?.name}
           </Badge>
         ) : null}
+        <ItemCategoryBar
+      completed={project.completedPoints}
+      inProgress={project.inProgressPoints}
+      remaining={project.remainingPoints}
+      total={project.totalPoints}/>
       </TableCell>
 
       <TableCell>
         <p>{project.summaryStatus}</p>
       </TableCell>
       <TableCell>
-        <p></p>
+        
       </TableCell>
       <TableCell>
         <p></p>
@@ -61,11 +68,20 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           <TableCell></TableCell>
           <TableCell>
             <p>{epic.summary}</p>
+            <p>{epic.assignee ? epic.assignee?.displayName : "No Assignee"} </p>
           </TableCell>
           <TableCell>
-            <Badge color={epic.analysis?.state?.color}>
+            {epic.totalPoints > 0 &&
+            <p><Badge color={epic.analysis?.state?.color}>
               {epic.analysis?.state?.name}
             </Badge>
+            
+            <ItemCategoryBar 
+            completed={epic.completedPoints} 
+            inProgress={epic.inProgressPoints} 
+            remaining={epic.remainingPoints} 
+            total={epic.totalPoints} />
+            </p>}
           </TableCell>
           <TableCell>
             <p>{epic.generatedSummary}</p>
@@ -77,7 +93,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             <p></p>
           </TableCell>
           <TableCell>
-            <p>{epic.analysis?.predictedEndDate}</p>
+          <Badge color={epic.analysis?.state?.color}>{epic.analysis?.predictedEndDate}</Badge>
           </TableCell>
         </TableRow>
       ))

@@ -13,37 +13,27 @@ import {
 import { redirect } from 'next/navigation';
 
 import { fetchAllProjectReports } from '../utils/analysisAccess';
-import ProgramsHeader from '../components/programHeader';
+import ProgramsHeader from '../components/projectHeader';
 import { SessionProvider } from 'next-auth/react';
 import ProjectRow from '../components/projectRow';
+import { jsonLog } from '@akfreas/tangential-core';
+import ProjectTable from '../components/projectTable';
+import ProjectHeader from '../components/projectHeader';
 export const dynamic = 'force-dynamic';
 
 export default async function ProgramsPage({}) {
   try {
     const report = await fetchAllProjectReports();
-
+    const needsFirstAnalysis = !report || report?.length === 0;
+  
     return (
       <main className="p-4 md:p-10 mx-auto max-w-7xl">
         <Card>
-          <ProgramsHeader />
-          <Table className="mt-5">
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>&nbsp;</TableHeaderCell>
-                <TableHeaderCell>Program</TableHeaderCell>
-                <TableHeaderCell>Status</TableHeaderCell>
-                <TableHeaderCell></TableHeaderCell>
-                <TableHeaderCell>Velocity</TableHeaderCell>
-                <TableHeaderCell>Life Cycle</TableHeaderCell>
-                <TableHeaderCell>Predicted End Date</TableHeaderCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {report?.map((project, index) => [
-                <ProjectRow project={project} key={index} />
-              ])}
-            </TableBody>
-          </Table>
+          <ProjectHeader/>
+          {!needsFirstAnalysis && <ProjectTable reports={report} />}
+          {needsFirstAnalysis && (
+            <Card color='green'>{`To get started, you'll need to import your projects into Tangential by clicking "Analyze Projects"`}.</Card>
+          )}
         </Card>
       </main>
     );
