@@ -20,7 +20,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
 
   return [
     <TableRow key={project.projectKey} onClick={toggleEpics}>
-      <TableCell>
+      <TableCell width={75} >
         <img
           src={`${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}/api/atlassianProxy?url=${project.avatar}`}
           width="50"
@@ -29,7 +29,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           crossOrigin="use-credentials"
         />
       </TableCell>
-      <TableCell>
+      <TableCell width={150}>
         <p>
           <Bold>{project.name}</Bold>
           <br />
@@ -53,12 +53,6 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
       <TableCell>
         <p>{project.summaryStatus}</p>
       </TableCell>
-      <TableCell>
-        
-      </TableCell>
-      <TableCell>
-        <p></p>
-      </TableCell>
     </TableRow>,
 
     // Only render the epic rows if areEpicsVisible is true
@@ -67,7 +61,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
         <TableRow key={epic.epicKey}>
           <TableCell></TableCell>
           <TableCell>
-            <p>{epic.summary}</p>
+            <Bold>{epic.summary}</Bold>
             <p>{epic.assignee ? epic.assignee?.displayName : "No Assignee"} </p>
           </TableCell>
           <TableCell>
@@ -83,14 +77,8 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             total={epic.totalPoints} />
             </p>}
           </TableCell>
-          <TableCell>
-            <p></p>
-          </TableCell>
-          <TableCell>
-            <p></p>
-          </TableCell>
-          <TableCell>
-            <p></p>
+          <TableCell className='whitespace-normal'>
+          <p className='break-words'>{epic.summaryText}</p>
           </TableCell>
           <TableCell>
           <Badge color={epic.analysis?.state?.color}>{epic.analysis?.predictedEndDate}</Badge>

@@ -25,7 +25,11 @@ export default function ProjectHeader() {
   return (
     <div className="flex flex-row justify-between mb-4">
       <Title>Programs</Title>
-      <Button onClick={() => startAnalysis(session)}>Analyze Projects</Button>
+
+      <div className="flex flex-row space-x-2">
+        <Button onClick={() => startAnalysis(session)}>Generate Report</Button>
+        <Button onClick={() => startAnalysis(session)}>Analyze Projects</Button>
+      </div>
     </div>
   );
 }

@@ -6,19 +6,17 @@ import { ProjectReport } from "@akfreas/tangential-core";
 
 export default function ProjectTable({reports}: {reports: ProjectReport[]} ) {
 
-  return (<Table className="mt-5">
+  return (<Table className="mt-5 ">
   <TableHead>
     <TableRow>
       <TableHeaderCell>&nbsp;</TableHeaderCell>
       <TableHeaderCell>Program</TableHeaderCell>
       <TableHeaderCell></TableHeaderCell>
       <TableHeaderCell></TableHeaderCell>
-      <TableHeaderCell></TableHeaderCell>
-      <TableHeaderCell></TableHeaderCell>
-      <TableHeaderCell>Predicted End Date</TableHeaderCell>
+      <TableHeaderCell >Predicted End Date</TableHeaderCell>
     </TableRow>
   </TableHead>
-  <TableBody>
+  <TableBody >
     {reports?.map((project, index) => [
       <ProjectRow project={project} key={index} />
     ])}
