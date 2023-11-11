@@ -14,7 +14,7 @@ interface BackendAuthenticatedRequestOptions {
 
 export async function makeBackendAuthenticatedRequest(options: BackendAuthenticatedRequestOptions): Promise<any> {
 
-  const session: AtlassianSession | null = await auth(); // pass req and res
+  const session: AtlassianSession | null = await auth(); 
   if (session === null) {
     throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
   }

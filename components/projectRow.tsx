@@ -64,13 +64,14 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
             <Bold>{epic.summary}</Bold>
             <p>{epic.assignee ? epic.assignee?.displayName : "No Assignee"} </p>
           </TableCell>
-          <TableCell>
-            {epic.totalPoints > 0 &&
+          <TableCell width={100} className="flex justify-center items-center">
+          {epic.totalPoints > 0 &&
             <p><Badge color={epic.analysis?.state?.color}>
               {epic.analysis?.state?.name}
             </Badge>
             
-            <ItemCategoryBar 
+            <ItemCategoryBar
+ 
             completed={epic.completedPoints} 
             inProgress={epic.inProgressPoints} 
             remaining={epic.remainingPoints} 

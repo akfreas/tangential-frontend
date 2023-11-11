@@ -12,14 +12,30 @@ import {
 } from '@tremor/react';
 import { redirect } from 'next/navigation';
 
-import { fetchAllProjectReports } from '../utils/analysisAccess';
+import { fetchAllProjectReports, jsonLog } from '@akfreas/tangential-core';
 import ProjectTable from '../components/projectTable';
 import ProjectHeader from '../components/projectHeader';
+import { auth } from '../utils/auth';
+import { AtlassianSession } from '../pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
+import { decode, getToken } from 'next-auth/jwt';
+import {decodeJwt}  from 'jose';
 export const dynamic = 'force-dynamic';
 
 export default async function ProgramsPage({}) {
   try {
-    const report = await fetchAllProjectReports();
+    const session: AtlassianSession | null = await auth(); 
+    if (session === null) {
+      throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
+    }
+    const { accessToken } = session;
+    const {sub} = decodeJwt(accessToken);
+
+    if (!sub) {
+      throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, sub is null");
+    }
+
+    const report = await fetchAllProjectReports(sub);
     const needsFirstAnalysis = !report || report?.length === 0;
   
     return (
