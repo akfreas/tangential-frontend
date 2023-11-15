@@ -18,7 +18,11 @@ export async function makeBackendAuthenticatedRequest(options: BackendAuthentica
   if (session === null) {
     throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
   }
-  const { accessToken, atlassianId } = session;
+  const { accessToken, atlassianWorkspaceId, refreshToken } = session;
+
+  if (!accessToken || !atlassianWorkspaceId || !refreshToken) {
+    throw new Error(`makeAtlassianAuthenticatedRequest: Authentication failed, missing ${!accessToken ? "accessToken": ""} ${!atlassianWorkspaceId ? "atlassianWorkspaceId" : ""} ${refreshToken ? "refreshToken" : ""}`);
+  }
 
   const url = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/${options.path}`
 
@@ -26,8 +30,9 @@ export async function makeBackendAuthenticatedRequest(options: BackendAuthentica
     {
       method: options.method,
       headers: {
+        'x-atlassian-refresh-token': session.refreshToken,
         'x-atlassian-token': accessToken,
-        'x-atlassian-id': atlassianId,
+        'x-atlassian-workspace-id': atlassianWorkspaceId,
       },
     });
   return response;

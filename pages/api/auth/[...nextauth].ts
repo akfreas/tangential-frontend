@@ -19,7 +19,7 @@ interface RefreshedToken extends Token {
 
 export interface AtlassianSession extends Session {
   accessToken: string;
-  atlassianId: string;
+  atlassianWorkspaceId: string;
   refreshToken: string;
   accessTokenExpires?: number;
 }
@@ -79,7 +79,7 @@ async function refreshAtlassianAccessToken(token: AtlassianJWT): Promise<Atlassi
 interface AtlassianJWT extends JWT {
   accessToken: string,
   refreshToken: string,
-  atlassianId: string,
+  atlassianWorkspaceId: string,
   accessTokenExpires: number,
 }
 
@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
         if (account && profile) {
           const { access_token, refresh_token, expires_at } = account;
           const resourceUrl = "https://api.atlassian.com/oauth/token/accessible-resources";
-          const [{ id: atlassianId }] = await jsonGet({
+          const [{ id: atlassianWorkspaceId }] = await jsonGet({
             url: resourceUrl,
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -113,7 +113,7 @@ export const authOptions: NextAuthOptions = {
           });
           token.accessToken = access_token;
           token.refreshToken = refresh_token;
-          token.atlassianId = atlassianId;
+          token.atlassianWorkspaceId = atlassianWorkspaceId;
           token.accessTokenExpires = expires_at ? expires_at * 1000 : undefined;
         }
       }
@@ -131,7 +131,7 @@ export const authOptions: NextAuthOptions = {
       const token: AtlassianJWT = t as AtlassianJWT;
       const session: AtlassianSession = s as AtlassianSession;
       session.accessToken = token.accessToken;
-      session.atlassianId = token.atlassianId;
+      session.atlassianWorkspaceId = token.atlassianWorkspaceId;
       session.refreshToken = token.refreshToken;
       session.accessTokenExpires = token.accessTokenExpires;
 

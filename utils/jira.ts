@@ -21,7 +21,7 @@ interface JiraRequestOptions {
 
 interface Session {
   accessToken: string;
-  atlassianId: string;
+  atlassianWorkspaceId: string;
 }
 
 export async function makeAtlassianAuthenticatedRequest(options: AtlassianAuthenticatedRequestOptions, req: NextApiRequest, res: NextApiResponse): Promise<any> {
@@ -49,9 +49,9 @@ async function makeJiraRequest(options: JiraRequestOptions): Promise<any> {
     throw new Error("makeJiraRequest: Authentication failed");
   }
 
-  const { accessToken, atlassianId } = session;
+  const { accessToken, atlassianWorkspaceId } = session;
 
-  const url = `https://api.atlassian.com/ex/jira/${atlassianId}/rest/api/3/${options.path}`;
+  const url = `https://api.atlassian.com/ex/jira/${atlassianWorkspaceId}/rest/api/3/${options.path}`;
 
   const response = await axiosInstance(url,
     {

@@ -7,14 +7,15 @@ import { useSession } from 'next-auth/react';
 
 async function startAnalysis(session: any) {
   const {
-    data: { accessToken, atlassianId }
+    data: { accessToken, atlassianWorkspaceId, refreshToken }
   } = session;
   console.log('session', session);
   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/workspace/analyze`, {
     method: 'GET',
     headers: {
       'x-atlassian-token': accessToken,
-      'x-atlassian-id': atlassianId
+      'x-atlassian-workspace-id': atlassianWorkspaceId,
+      'x-atlassian-refresh-token': refreshToken
     }
   });
 }

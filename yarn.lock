@@ -7,10 +7,10 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@akfreas/tangential-core@^1.0.11":
-  version "1.0.11"
-  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.11/d804411184710dcfd736f6eb05204169c913918c#d804411184710dcfd736f6eb05204169c913918c"
-  integrity sha512-WmZR/b61T8+zOTGdjAXOL/eSlDYL4ce9bUNa9rUNqgYQkTNWnkVCGq6yJMG8n4JEM+8qdkND0+nlQ3hzB+3vaQ==
+"@akfreas/tangential-core@^1.0.12":
+  version "1.0.12"
+  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.12/337c3ccdb0bf74006fc54bc7f2f752a92ac45233#337c3ccdb0bf74006fc54bc7f2f752a92ac45233"
+  integrity sha512-WdzOXOLOXSBNOR6fVGjNp85nAvQmp2AJill0Ex389jHmost1OaLRE95etBXoOAXTz7df71KKvr9N99oGuvmJxQ==
 
 "@algolia/cache-browser-local-storage@4.20.0":
   version "4.20.0"
