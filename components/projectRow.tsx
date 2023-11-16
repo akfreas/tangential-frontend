@@ -66,7 +66,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           </TableCell>
           <TableCell className="flex justify-center items-center">
   <div className="flex-col justify-center items-center w-100">
-    {epic.totalPoints > 0 &&
+    {epic.totalPoints > 0 ?
       <>
         <Badge color={epic.analysis?.state?.color ?? "yellow"}>
           {epic.analysis?.state?.name ?? "No Status"}
@@ -77,7 +77,10 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           remaining={epic.remainingPoints} 
           total={epic.totalPoints} />
       </>
-    }
+    : <Badge color={"yellow"}>
+    {"No Status"}
+  </Badge>
+}
   </div>
 </TableCell>
 
@@ -86,6 +89,9 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           </TableCell>
           <TableCell>
           <Badge color={epic.analysis?.state?.color}>{epic.analysis?.predictedEndDate ?? "No Date"}</Badge>
+          </TableCell>
+          <TableCell>
+            <Badge color={epic.longRunningIssues.length / epic.childIssues.length > 0.1 ? "red" : "green"}>{epic.longRunningIssues?.length}</Badge>
           </TableCell>
         </TableRow>
       ))
