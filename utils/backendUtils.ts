@@ -30,9 +30,9 @@ export async function makeBackendAuthenticatedRequest(options: BackendAuthentica
     {
       method: options.method,
       headers: {
-        'x-atlassian-refresh-token': session.refreshToken,
-        'x-atlassian-token': accessToken,
-        'x-atlassian-workspace-id': atlassianWorkspaceId,
+        'X-Atlassian-Refresh-Token': session.refreshToken,
+        'X-Atlassian-Token': accessToken,
+        'X-Atlassian-Workspace-Id': atlassianWorkspaceId,
       },
     });
   return response;

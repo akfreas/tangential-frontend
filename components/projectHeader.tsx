@@ -13,9 +13,9 @@ async function startAnalysis(session: any) {
   await fetch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/workspace/analyze`, {
     method: 'GET',
     headers: {
-      'x-atlassian-token': accessToken,
-      'x-atlassian-workspace-id': atlassianWorkspaceId,
-      'x-atlassian-refresh-token': refreshToken
+      'X-Atlassian-Token': accessToken,
+      'X-Atlassian-Workspace-Id': atlassianWorkspaceId,
+      'X-Atlassian-Refresh-Token': refreshToken
     }
   });
 }

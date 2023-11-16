@@ -19,7 +19,8 @@ const nextConfig = {
       'avatar-management--avatars.us-west-2.prod.public.atl-paas.net',
       'api.atlassian.com',
       'tangential.eu.ngrok.io',
-      'dev.tangential.app'
+      'dev.tangential.app',
+      'live.tangential.app',
     ]
   }
 };
