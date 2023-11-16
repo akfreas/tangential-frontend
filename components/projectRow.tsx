@@ -53,6 +53,41 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
       <TableCell>
         <p>{project.summaryStatus}</p>
       </TableCell>
-    </TableRow>
+    </TableRow>,
+
+    // Only render the epic rows if areEpicsVisible is true
+    areEpicsVisible && project.epics && project.epics.length > 0 &&
+    project.epics.map((epic) => (
+        <TableRow key={epic.epicKey}>
+          <TableCell></TableCell>
+          <TableCell>
+            <Bold>{epic.summary}</Bold>
+            <p>{epic.assignee ? epic.assignee?.displayName : "No Assignee"} </p>
+          </TableCell>
+          <TableCell className="flex justify-center items-center">
+  <div className="flex-col justify-center items-center w-100">
+    {epic.totalPoints > 0 &&
+      <>
+        <Badge color={epic.analysis?.state?.color ?? "yellow"}>
+          {epic.analysis?.state?.name ?? "No Status"}
+        </Badge>
+        <ItemCategoryBar
+          completed={epic.completedPoints} 
+          inProgress={epic.inProgressPoints} 
+          remaining={epic.remainingPoints} 
+          total={epic.totalPoints} />
+      </>
+    }
+  </div>
+</TableCell>
+
+          <TableCell className='whitespace-normal'>
+          <p className='break-words'>{epic.summaryText}</p>
+          </TableCell>
+          <TableCell>
+          <Badge color={epic.analysis?.state?.color}>{epic.analysis?.predictedEndDate ?? "No Date"}</Badge>
+          </TableCell>
+        </TableRow>
+      ))
   ];
 }

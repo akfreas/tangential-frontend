@@ -12,7 +12,7 @@ import {
 } from '@tremor/react';
 import { redirect } from 'next/navigation';
 
-import { extractFromJiraAuth, fetchAllProjectReports, jsonLog } from '@akfreas/tangential-core';
+import { extractFromJiraAuth, fetchLatestProjectReportsWithEpics,  } from '@akfreas/tangential-core';
 import ProjectTable from '../components/projectTable';
 import ProjectHeader from '../components/projectHeader';
 import { auth } from '../utils/auth';
@@ -33,7 +33,7 @@ export default async function ProgramsPage({}) {
       throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, sub is null");
     }
 
-    const report = await fetchAllProjectReports(atlassianUserId);
+    const report = await fetchLatestProjectReportsWithEpics(atlassianUserId);
     const needsFirstAnalysis = !report || report?.length === 0;
   
     return (
