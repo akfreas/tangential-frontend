@@ -20,6 +20,9 @@ async function startAnalysis(session: any) {
   });
 }
 
+async function showReportWizard(session: any) {
+}
+
 export default function ProjectHeader() {
   const session = useSession();
   console.log('session', session);
@@ -28,7 +31,7 @@ export default function ProjectHeader() {
       <Title>Programs</Title>
 
       <div className="flex flex-row space-x-2">
-        <Button onClick={() => startAnalysis(session)}>Generate Report</Button>
+        <Button onClick={() => showReportWizard(session)}>Generate Report</Button>
         <Button onClick={() => startAnalysis(session)}>Analyze Projects</Button>
       </div>
     </div>

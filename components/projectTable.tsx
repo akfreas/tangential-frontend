@@ -15,6 +15,7 @@ export default function ProjectTable({reports}: {reports: ProjectReport[]} ) {
       <TableHeaderCell></TableHeaderCell>
       <TableHeaderCell >Predicted End Date</TableHeaderCell>
       <TableHeaderCell >Long Running Issues</TableHeaderCell>
+      <TableHeaderCell></TableHeaderCell>
     </TableRow>
   </TableHead>
   <TableBody >
