@@ -51,14 +51,14 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
       </TableCell>
 
       <TableCell>
-        <p>{project.summaryStatus}</p>
+        <p>{project.statusName}</p>
       </TableCell>
     </TableRow>,
 
     // Only render the epic rows if areEpicsVisible is true
     areEpicsVisible && project.epics && project.epics.length > 0 &&
     project.epics.map((epic) => (
-        <TableRow key={epic.epicKey}>
+        <TableRow key={epic.key}>
           <TableCell></TableCell>
           <TableCell>
             <Bold>{epic.summary}</Bold>

@@ -1,30 +1,11 @@
 'use client'
 import React, { useState } from 'react';
-import { Card, DatePicker, Button, RadioButton } from '@tremor/react';
+import { Card, DatePicker, Button } from '@tremor/react';
 
 import { Text } from '@tremor/react';
+import { ProjectReport } from '@akfreas/tangential-core';
 
-// Step components (these would be in separate files in a real app)
-function SelectProgramStep({ onSelect }) {
-  return (
-    <Card>
-      <div>Select program</div>
-      <DatePicker />
-      <Card onClick={() => onSelect('newAppMonitoring')}>
-        New application monitoring
-        <Button>Select</Button>
-      </Card>
-      <Text onClick={() => onSelect('infraCostMonitoring')}>
-        Infra cost monitoring
-      </Text>
-      <Text onClick={() => onSelect('k8Migration')}>
-        K8 migration
-      </Text>
-    </Card>
-  );
-};
-
-function SelectTemplateStep({ onSelect }) {
+function SelectTemplateStep({ onSelect }: { onSelect: (template: string) => void }) {
   return (
     <Card>
       <div>Who would you like to update?</div>
@@ -42,7 +23,7 @@ function SelectTemplateStep({ onSelect }) {
 };
 
 // Main Wizard component
-export default function ReportWizard({ report}) {
+export default function ReportWizard() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -51,20 +32,19 @@ export default function ReportWizard({ report}) {
     setCurrentStep(currentStep + 1);
   };
 
-  const selectProgram = (program) => {
-    setSelectedProgram(program);
+  const selectProgram = (program: string) => {
+    // setSelectedProgram(program);
     nextStep();
   };
 
-  const selectTemplate = (template) => {
-    setSelectedTemplate(template);
+  const selectTemplate = (template: string) => {
+    // setSelectedTemplate(template);
     // Here you would typically handle the final submission or go to the next step
   };
 
   return (
     <div>
-      {currentStep === 1 && <SelectProgramStep onSelect={selectProgram} />}
-      {currentStep === 2 && <SelectTemplateStep onSelect={selectTemplate} />}
+      {currentStep === 1 && <SelectTemplateStep onSelect={selectTemplate} />}
 
       {/* You could conditionally render the Next button based on the current step */}
       {currentStep < 2 && <Button onClick={nextStep}>Next</Button>}
