@@ -31,7 +31,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
       </TableCell>
       <TableCell width={150}>
         <p>
-          <Bold>{project.name}</Bold>
+          <Bold>{project.title}</Bold>
           <br />
           {project.lead.displayName}
           <br />
@@ -61,7 +61,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
         <TableRow key={epic.key}>
           <TableCell></TableCell>
           <TableCell>
-            <Bold>{epic.summary}</Bold>
+            <Bold>{epic.title}</Bold>
             <p>{epic.assignee ? epic.assignee?.displayName : "No Assignee"} </p>
           </TableCell>
           <TableCell className="flex justify-center items-center">
@@ -85,7 +85,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
 </TableCell>
 
           <TableCell className='whitespace-normal'>
-          <p className='break-words'>{epic.summaryText}</p>
+          <p className='break-words'>{epic.summary?.shortSummary}</p>
           </TableCell>
           <TableCell>
           <Badge color={epic.analysis?.state?.color}>{epic.analysis?.predictedEndDate ?? "No Date"}</Badge>
