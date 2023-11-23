@@ -32,16 +32,11 @@ export default function ProjectHeader() {
     });
   }
 
-  async function showReportWizard(session: any) {
-    // ...
-  }
-
   return (
     <div className="flex flex-row justify-between mb-4">
       <Title>Programs</Title>
 
       <div className="flex flex-row space-x-2">
-        <Button onClick={() => showReportWizard(session)}>Generate Report</Button>
         <Button
           style={{ backgroundColor: buttonState.color }}
           onClick={() => startAnalysis(session)}
