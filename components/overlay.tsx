@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, Text, Title } from "@tremor/react";
+import { Button, Card, Subtitle, Text, Title } from "@tremor/react";
 import { useEffect, useRef, useState } from "react";
 import { apiFetch, nextApiFetch } from "../utils/frontendRequest";
 import { useSession } from "next-auth/react";
@@ -16,7 +16,9 @@ export interface ReportTemplate {
   atlassianWorkspaceId: string;
 }
 
-export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedBuildId }: { showOverlay: boolean, setShowOverlay: (show: boolean) => void, selectedBuildId: string }) {
+export default function ReportWizard({ 
+  showOverlay, setShowOverlay, selectedBuildId, projectName }
+  : { showOverlay: boolean, setShowOverlay: (show: boolean) => void, selectedBuildId: string, projectName: string }) {
   const [reportTemplates, setReportTemplates] = useState<ReportTemplate[]>([]);
   const [generateReport, setGenerateReport] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ReportTemplate | undefined>(undefined); 
@@ -103,7 +105,7 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
       <div ref={contentRef} className="w-1/2 aspect-square" style={{ background: 'white', padding: '20px', borderRadius: '8px' }}>
         {generateReport ? (
                           [<div key={"block"} className="h-full">
-                            <Text>This will generate a text based report for {selectedTemplate?.audience}.</Text>
+                            <Text>This will generate a text based report on the project {projectName} for {selectedTemplate?.audience}.</Text>
                           <div key="buttonContainer" className="mt-10 flex  flex-shrink-0 items-center">
                             
 
@@ -111,7 +113,8 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
           onClick={handleGenerateReport}>Generate Report</Button>
                           </div></div>]
         ) : (
-          [<Title key={'selectTemplate'} className={'mb-20'}>Select a template</Title>,
+          [<Title key={'selectTemplate'} className={'mb-20'}>Generate Report</Title>,
+          <Subtitle key={'subtitle'}>Who is your audience?</Subtitle>,
           reportTemplates.map((template) => (
             <Card key={template.id} className={"mt-3"} onClick={() => handleCardClick(template)}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

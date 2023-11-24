@@ -4,7 +4,6 @@ import { Button, Card, Title } from '@tremor/react';
 import React, { useState } from 'react';
 import { makeBackendAuthenticatedRequest } from '../utils/backendUtils';
 import { useSession } from 'next-auth/react';
-import UpdateTemplates from './overlay';
 
 export default function ProjectHeader() {
   const session = useSession();

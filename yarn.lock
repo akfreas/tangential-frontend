@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@akfreas/tangential-core@^1.0":
-  version "1.0.18"
-  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.18/2f160f9c0585654f0ccfde98b846803bd509f422#2f160f9c0585654f0ccfde98b846803bd509f422"
-  integrity sha512-6zWNyLkqwJJPIlKrJDk2q0fdQYHxhrmf+FyiHdYOEYRyqmPHUEhdy4cq6Tp70CHvftg1KKfYjVakAHNGjpXkGw==
+"@akfreas/tangential-core@^1.0.20":
+  version "1.0.20"
+  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.20/969afe1ea3d277f0cff5f52c96e109f4d8dca347#969afe1ea3d277f0cff5f52c96e109f4d8dca347"
+  integrity sha512-TvEzWLviR2lzKTfLpbqNo1+kptTT8zO5MxLALYq3lgcZ6Lw0miiGKgpwYH8tFWjp87HdzfKS++ilIcQ9OHICrA==
   dependencies:
     jose "^5.1.0"
 

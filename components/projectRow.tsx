@@ -10,6 +10,8 @@ import {
 } from '@tremor/react';
 import ItemCategoryBar from './itemCategoryBar';
 import Overlay from './overlay';
+import { NewspaperIcon } from '@heroicons/react/24/outline';
+import ReportWizard from './overlay';
 export default function ProjectRow({ project, isExpanded, toggleRow }: { project: ProjectReport, isExpanded: boolean, toggleRow: () => void }) {
   
   const [isHovering, setIsHovering] = useState(false);
@@ -21,9 +23,10 @@ export default function ProjectRow({ project, isExpanded, toggleRow }: { project
   };
   return [
 
-    <Overlay 
+    <ReportWizard 
     showOverlay={showOverlay} 
     setShowOverlay={setShowOverlay} 
+    projectName={project.title}
     key="overlay" selectedBuildId={project.buildId}/>,
     <TableRow 
       key={project.projectKey} 
@@ -74,9 +77,7 @@ export default function ProjectRow({ project, isExpanded, toggleRow }: { project
       
       <TableCell width={150}>
         {isHovering && (
-          <Button onClick={startReportGeneration}>
-            Generate Report
-          </Button>
+          <NewspaperIcon onClick={startReportGeneration} className="w-6 h-6" />
         )}
       </TableCell>
     </TableRow>,
