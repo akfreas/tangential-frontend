@@ -10,18 +10,12 @@ import {
 } from '@tremor/react';
 import ItemCategoryBar from './itemCategoryBar';
 import Overlay from './overlay';
-
-export default function ProjectRow({ project, areEpicsVisible, setAreEpicsVisible }: { 
-  project: ProjectReport,
-  areEpicsVisible: boolean,
-  setAreEpicsVisible: (areEpicsVisible: boolean) => void }) {
+export default function ProjectRow({ project, isExpanded, toggleRow }: { project: ProjectReport, isExpanded: boolean, toggleRow: () => void }) {
+  
   const [isHovering, setIsHovering] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const toggleEpics = () => {
-    setAreEpicsVisible(!areEpicsVisible);
-  };
-
+ 
   const startReportGeneration = () => {
     setShowOverlay(true);
   };
@@ -55,8 +49,8 @@ export default function ProjectRow({ project, areEpicsVisible, setAreEpicsVisibl
 
       </TableCell>
       <TableCell width={100} className="flex justify-center items-center">
-        <div onClick={toggleEpics} className="flex-col justify-center items-center w-100">
-        {areEpicsVisible ?
+      <div onClick={toggleRow} className="flex-col justify-center items-center w-100">
+        {isExpanded ?
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
@@ -88,7 +82,7 @@ export default function ProjectRow({ project, areEpicsVisible, setAreEpicsVisibl
     </TableRow>,
 
     // Only render the epic rows if areEpicsVisible is true
-    areEpicsVisible && project.epics && project.epics.length > 0 &&
+    isExpanded && project.epics && project.epics.length > 0 && 
     project.epics.map((epic) => (
         <TableRow key={epic.key}>
           <TableCell></TableCell>

@@ -24,11 +24,11 @@ export default async function handler(
   if (!body.id) {
     return res.status(400).json({ error: "Report ID is required" });
   }
-  if (body.id !== req.query.reportId) {
-    return res
-      .status(400)
-      .json({ error: "Report ID in body does not match report ID in URL" });
-  }
+  // if (body.id !== req.query.reportId) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Report ID in body does not match report ID in URL" });
+  // }
   // Check if there is a session
   if (!session) {
     // If there's no session, return a 401 Unauthorized response

@@ -7,7 +7,16 @@ import { useState } from "react";
 
 export default function ProjectTable({reports}: {reports: ProjectReport[]} ) {
 
-  const [areEpicsVisible, setAreEpicsVisible] = useState(false);
+  const [expandedRows, setExpandedRows] = useState<{[key: string]: boolean}>({});
+  const toggleRow = (projectKey: string) => {
+    setExpandedRows(prev => ({
+      ...prev,
+      [projectKey]: !prev[projectKey]
+    }));
+  };
+
+
+  const anyRowExpanded = Object.values(expandedRows).some(value => value);
 
   return (<Table className="mt-5 ">
   <TableHead>
@@ -16,15 +25,20 @@ export default function ProjectTable({reports}: {reports: ProjectReport[]} ) {
       <TableHeaderCell>Program</TableHeaderCell>
       <TableHeaderCell></TableHeaderCell>
       <TableHeaderCell></TableHeaderCell>
-      <TableHeaderCell >{areEpicsVisible && "Predicted End Date"}</TableHeaderCell>
-      <TableHeaderCell >{areEpicsVisible && "Long Running Issues"}</TableHeaderCell>
+      <TableHeaderCell>{anyRowExpanded && "Predicted End Date"}</TableHeaderCell>
+      <TableHeaderCell>{anyRowExpanded && "Long Running Issues"}</TableHeaderCell>
       <TableHeaderCell></TableHeaderCell>
     </TableRow>
   </TableHead>
   <TableBody >
-    {reports?.map((project, index) => [
-      <ProjectRow project={project} key={index} areEpicsVisible={areEpicsVisible} setAreEpicsVisible={setAreEpicsVisible} />,
-    ])}
+  {reports?.map((project) => (
+          <ProjectRow
+            project={project}
+            key={project.projectKey}
+            isExpanded={expandedRows[project.projectKey]}
+            toggleRow={() => toggleRow(project.projectKey)}
+          />
+        ))}
   </TableBody>
   </Table>
 )

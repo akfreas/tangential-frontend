@@ -21,7 +21,7 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
   const [generateReport, setGenerateReport] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ReportTemplate | undefined>(undefined); 
   const session = useSession();
-  const contentRef = useRef<HTMLDivElement>(null);
+  let contentRef = useRef<HTMLDivElement>(null);
 
   
   useEffect(() => {
@@ -29,6 +29,7 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
     const closeOverlay = () => {
       setSelectedTemplate(undefined);
       setShowOverlay(false);
+      setGenerateReport(false);
       contentRef.current?.remove();
     }
   
@@ -51,7 +52,7 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
         const templates: ReportTemplate[] | undefined = await (await nextApiFetch(session, '/listTemplates'))?.json();
         if (!templates) throw new Error('Failed to fetch templates');
         console.log('Templates:', templates);
-        setReportTemplates(templates);
+        setReportTemplates(JSON.parse(JSON.stringify(templates)));
       } catch (error) {
         console.error('Failed to fetch templates:', error);
       }
