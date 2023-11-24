@@ -1,11 +1,15 @@
-'use client'
-import React, { useState, useRef, useEffect } from 'react';
+"use client";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Card, Title } from "@tremor/react";
 import { TextReport, deleteTextReportById } from "@akfreas/tangential-core";
-import { DeleteIcon, EditIcon, ShareIcon } from '../../utils/icons';
-import { DateTime } from 'luxon';  
-import { nextApiFetch } from '../../utils/frontendRequest';
-import { useSession } from 'next-auth/react';
+import { DateTime } from "luxon";
+import { nextApiFetch } from "../../utils/frontendRequest";
+import { useSession } from "next-auth/react";
+import {
+  DocumentDuplicateIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 export default function ReportComponent(report: TextReport) {
   const [isEditing, setIsEditing] = useState(false);
@@ -18,9 +22,19 @@ export default function ReportComponent(report: TextReport) {
   const handleEdit = () => {
     setIsEditing(true);
   };
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false); // New state variable
 
   const handleShare = () => {
-    // Handle share click
+    navigator.clipboard
+      .writeText(editedText)
+      .then(() => {
+        console.log("Text successfully copied to clipboard");
+        setShowCopiedMessage(true); // Set the copied message to show
+        setTimeout(() => setShowCopiedMessage(false), 3000); // Hide the message after 3 seconds
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
   };
 
   const handleDelete = () => {
@@ -36,7 +50,7 @@ export default function ReportComponent(report: TextReport) {
 
     nextApiFetch(auth, `/report/delete/${report.id}`).then(() => {
       setIsDeleted(true);
-    })
+    });
   };
 
   const handleCancelDelete = () => {
@@ -44,14 +58,14 @@ export default function ReportComponent(report: TextReport) {
   };
 
   const handleSave = () => {
-    nextApiFetch(auth, `/report/edit/${report.id}`, 'post', {
+    nextApiFetch(auth, `/report/edit/${report.id}`, "post", {
       id: report.id,
       text: editedText,
       name: report.name,
       description: report.description,
     }).then(() => {
       setIsEditing(false);
-    })
+    });
     // Handle the save operation here
   };
 
@@ -62,12 +76,12 @@ export default function ReportComponent(report: TextReport) {
 
   const toggleExpand = () => {
     setExpanded(!expanded);
-  }
+  };
 
   // Auto-resize text area
   useEffect(() => {
     if (textAreaRef.current) {
-      textAreaRef.current.style.height = 'inherit';
+      textAreaRef.current.style.height = "inherit";
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
     }
   }, [editedText]);
@@ -77,10 +91,14 @@ export default function ReportComponent(report: TextReport) {
   }
 
   return (
-    <Card onClick={toggleExpand} key={report.id} className="p-4">
+    <Card key={report.id} className="p-4">
+      <div onClick={toggleExpand} >
       <Title>{report.name}</Title>
-      <p>Generated on: {DateTime.fromISO(report.generatedOn).toFormat('yyyy.MM.dd hh:mm a')}</p>
-      
+      <p>
+        Generated on:{" "}
+        {DateTime.fromISO(report.generatedOn).toFormat("yyyy.MM.dd hh:mm a")}
+      </p>
+
       {expanded && !isDeleting && !isEditing && (
         <p>
           {editedText.split("\n").map((line, index, array) => (
@@ -94,32 +112,59 @@ export default function ReportComponent(report: TextReport) {
 
       {isEditing && (
         <div>
-          <textarea 
+          <textarea
             ref={textAreaRef}
-            value={editedText} 
-            onChange={(e) => setEditedText(e.target.value)} 
-            className="w-full border-gray-300 rounded-md shadow-sm" 
+            value={editedText}
+            onChange={(e) => setEditedText(e.target.value)}
+            className="w-full border-gray-300 rounded-md shadow-sm"
           />
           <div className="flex justify-end space-x-2 mt-2">
-            <Button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</Button>
-            <Button onClick={handleDiscard} className="bg-red-500 text-white px-4 py-2 rounded-md">Discard</Button>
+            <Button
+              onClick={handleSave}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Save
+            </Button>
+            <Button
+              onClick={handleDiscard}
+              className="bg-red-500 text-white px-4 py-2 rounded-md"
+            >
+              Discard
+            </Button>
           </div>
         </div>
       )}
-
+</div>
       {!isEditing && (
         <div id="buttonPanel" className="flex justify-end space-x-2 mt-2">
           {isDeleting ? (
             <>
-              <Button onClick={handleConfirmDelete} className="bg-red-500 text-white px-4 py-2 rounded-md">Confirm Delete</Button>
-              <Button onClick={handleCancelDelete} className="bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</Button>
+              <Button
+                onClick={handleConfirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
+                Confirm Delete
+              </Button>
+              <Button
+                onClick={handleCancelDelete}
+                className="bg-gray-500 text-white px-4 py-2 rounded-md"
+              >
+                Cancel
+              </Button>
             </>
           ) : (
-            <>
-              <button onClick={handleEdit} className="p-2"><EditIcon /></button>
-              <button onClick={handleShare} className="p-2"><ShareIcon /></button>
-              <button onClick={handleDelete} className="p-2"><DeleteIcon /></button>
-            </>
+              <>
+              {showCopiedMessage && <p>Copied to Clipboard</p>}
+              <button onClick={handleEdit} className="p-2">
+                <PencilSquareIcon className="h-6 w-6" />
+              </button>
+              <button onClick={handleShare} className="p-2">
+                <DocumentDuplicateIcon className="h-6 w-6" />
+              </button>
+              <button onClick={handleDelete} className="p-2">
+                <TrashIcon className="h-6 w-6"/>
+              </button>
+              </>
           )}
         </div>
       )}
