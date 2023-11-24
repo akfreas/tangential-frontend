@@ -9,20 +9,26 @@ import {
   TableRow
 } from '@tremor/react';
 import ItemCategoryBar from './itemCategoryBar';
+import Overlay from './overlay';
 
 export default function ProjectRow({ project }: { project: ProjectReport }) {
   const [areEpicsVisible, setAreEpicsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const toggleEpics = () => {
     setAreEpicsVisible(!areEpicsVisible);
   };
 
   const startReportGeneration = () => {
-    // Add your logic for report generation here
-    console.log("Generating report for", project.projectKey);
+    setShowOverlay(true);
   };
   return [
+
+    <Overlay 
+    showOverlay={showOverlay} 
+    setShowOverlay={setShowOverlay} 
+    key="overlay" selectedBuildId={project.buildId}/>,
     <TableRow 
       key={project.projectKey} 
       onMouseEnter={() => setIsHovering(true)}
@@ -119,5 +125,6 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
           </TableCell>
         </TableRow>
       ))
+
   ];
 }

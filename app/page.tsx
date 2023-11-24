@@ -10,45 +10,15 @@ import {
   TableRow,
   Title
 } from '@tremor/react';
-import { redirect } from 'next/navigation';
-
-import { extractFromJiraAuth, fetchLatestProjectReportsWithEpics,  } from '@akfreas/tangential-core';
-import ProjectTable from '../components/projectTable';
-import ProjectHeader from '../components/projectHeader';
-import { auth } from '../utils/auth';
-import { AtlassianSession } from '../pages/api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
-import { decode, getToken } from 'next-auth/jwt';
+import ProgramsPage from './programsPage';
 export const dynamic = 'force-dynamic';
 
-export default async function ProgramsPage({}) {
-  try {
-    const session: AtlassianSession | null = await auth(); 
-    if (session === null) {
-      throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, session is null");
-    }
-    const {atlassianUserId} = extractFromJiraAuth(session);
+export default async function ClientProgramsPage({}) {
 
-    if (!atlassianUserId) {
-      throw new Error("makeAtlassianAuthenticatedRequest: Authentication failed, sub is null");
-    }
-
-    const report = await fetchLatestProjectReportsWithEpics(atlassianUserId);
-    const needsFirstAnalysis = !report || report?.length === 0;
-  
     return (
+
       <main className="p-4 md:p-10 mx-auto max-w-screen-2xl">
-        <Card>
-          <ProjectHeader/>
-          {!needsFirstAnalysis && <ProjectTable reports={report} />}
-          {needsFirstAnalysis && (
-            <Card color='green'>{`To get started, you'll need to import your projects into Tangential by clicking "Analyze Projects"`}.</Card>
-          )}
-        </Card>
+        <ProgramsPage/>
       </main>
     );
-  } catch (error) {
-    console.error(error);
-    return redirect('/');
-  }
 }
