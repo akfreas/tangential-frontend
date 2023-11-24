@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Title } from "@tremor/react";
+import { Button, Card, Text, Title } from "@tremor/react";
 import { useEffect, useRef, useState } from "react";
 import { apiFetch, nextApiFetch } from "../utils/frontendRequest";
 import { useSession } from "next-auth/react";
@@ -99,19 +99,26 @@ export default function UpdateTemplates({ showOverlay, setShowOverlay, selectedB
       justifyContent: 'center',
       zIndex: 1000,
     }}>
-      <div ref={contentRef} style={{ background: 'white', padding: '20px', borderRadius: '8px' }}>
-        <Title style={{ marginBottom: '20px' }}>Select a template</Title>
+      <div ref={contentRef} className="w-1/2 aspect-square" style={{ background: 'white', padding: '20px', borderRadius: '8px' }}>
         {generateReport ? (
-          <button onClick={handleGenerateReport}>Generate Report</button>
+                          [<div key={"block"} className="h-full">
+                            <Text>This will generate a text based report for {selectedTemplate?.audience}.</Text>
+                          <div key="buttonContainer" className="mt-10 flex  flex-shrink-0 items-center">
+                            
+
+          <Button key={"generateReportButton"} 
+          onClick={handleGenerateReport}>Generate Report</Button>
+                          </div></div>]
         ) : (
+          [<Title key={'selectTemplate'} className={'mb-20'}>Select a template</Title>,
           reportTemplates.map((template) => (
-            <Card key={template.id} style={cardStyle} onClick={() => handleCardClick(template)}>
+            <Card key={template.id} className={"mt-3"} onClick={() => handleCardClick(template)}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <p>{template.audience}</p>
                 {svgChevron}
               </div>
             </Card>
-          ))
+          ))]
         )}
       </div>
     </div>

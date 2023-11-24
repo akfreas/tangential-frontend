@@ -11,8 +11,10 @@ import {
 import ItemCategoryBar from './itemCategoryBar';
 import Overlay from './overlay';
 
-export default function ProjectRow({ project }: { project: ProjectReport }) {
-  const [areEpicsVisible, setAreEpicsVisible] = useState(false);
+export default function ProjectRow({ project, areEpicsVisible, setAreEpicsVisible }: { 
+  project: ProjectReport,
+  areEpicsVisible: boolean,
+  setAreEpicsVisible: (areEpicsVisible: boolean) => void }) {
   const [isHovering, setIsHovering] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -76,7 +78,7 @@ export default function ProjectRow({ project }: { project: ProjectReport }) {
         <p className="break-words">{project.summary?.shortSummary}</p>
       </TableCell>
       
-      <TableCell width={350}>
+      <TableCell width={150}>
         {isHovering && (
           <Button onClick={startReportGeneration}>
             Generate Report

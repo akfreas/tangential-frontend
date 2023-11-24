@@ -8,16 +8,16 @@ export const LoginWrapped = ({ children }: { children: React.ReactNode }) => {
 
   if (status === 'loading') {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center" style={{ height: '100vh' }}>
         <Oval
           height={80}
           width={80}
-          color="#4fa94d"
+          color="#DF862B"
           wrapperStyle={{}}
           wrapperClass=""
           visible={true}
           ariaLabel="oval-loading"
-          secondaryColor="#4fa94d"
+          secondaryColor="#DF862B"
           strokeWidth={2}
           strokeWidthSecondary={2}
         />
