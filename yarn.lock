@@ -8,9 +8,9 @@
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
 "@akfreas/tangential-core@^1.0.20":
-  version "1.0.24"
-  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.24/f61f69b67f722eaddf6c5f610f521863fe889107#f61f69b67f722eaddf6c5f610f521863fe889107"
-  integrity sha512-wpSKcjsbwZSjrz+/UdvCkvrkApNPOS7vMqOy2PRv3xS6ycVUm+AH7j4CyN8OBd47Ach7+s1i0R1Ks2SIHw2wxg==
+  version "1.0.25"
+  resolved "https://npm.pkg.github.com/download/@akfreas/tangential-core/1.0.25/e58d61f17657e108fb2dfd9d6716d2fd485cbea9#e58d61f17657e108fb2dfd9d6716d2fd485cbea9"
+  integrity sha512-+QrdNjFM9RRqvRJg6woUCypfCmckGm/VRulUkoK52x6uY/ux4dkA6UefMVPIJjyKNCLdI73UI3WpSyhBMHwP/w==
   dependencies:
     jose "^5.1.0"
 
