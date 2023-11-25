@@ -36,7 +36,7 @@ export default function ProjectHeader() {
       });
   }
 
-  function handleSubmit() {
+  function handleAddProject() {
     nextApiFetch(session, '/projectDefinition/create', 'POST', {
       jqlQuery,
       name,
@@ -66,7 +66,7 @@ export default function ProjectHeader() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button onClick={handleAddProject}>Add Project</Button>
         <Button
           loading={buttonState.loading}
           style={{ backgroundColor: buttonState.color }}
