@@ -14,6 +14,7 @@ import { redirect } from 'next/navigation';
 
 import {
   extractFromJiraAuth,
+  fetchAllProjectDefinitionsByOwner,
   fetchLatestProjectReportsWithEpics,
   jsonLog,
 } from '@akfreas/tangential-core';
@@ -34,7 +35,8 @@ export default async function ProgramsPage({}) {
       );
     }
     const { atlassianUserId } = extractFromJiraAuth(session);
-
+    const projectDefinitions =
+      await fetchAllProjectDefinitionsByOwner(atlassianUserId);
     if (!atlassianUserId) {
       throw new Error(
         'makeAtlassianAuthenticatedRequest: Authentication failed, sub is null',
@@ -46,12 +48,11 @@ export default async function ProgramsPage({}) {
 
     return (
       <Card>
-        <ProjectHeader />
+        <ProjectHeader projectDefinitions={projectDefinitions} />
         {!needsFirstAnalysis && <ProjectTable reports={reports} />}
         {needsFirstAnalysis && (
           <Card color='green'>
-            {`To get started, you'll need to import your projects into Tangential by clicking "Analyze Projects"`}
-            .
+            {`To get started, you'll need to define a project using a JQL query.`}
           </Card>
         )}
       </Card>

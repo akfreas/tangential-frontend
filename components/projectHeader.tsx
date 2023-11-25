@@ -5,8 +5,13 @@ import React, { useState } from 'react';
 import { makeBackendAuthenticatedRequest } from '../utils/backendUtils';
 import { useSession } from 'next-auth/react';
 import { apiFetch, nextApiFetch } from '../utils/frontendRequest';
+import { ProjectDefinition } from '@akfreas/tangential-core';
 
-export default function ProjectHeader() {
+export default function ProjectHeader({
+  projectDefinitions,
+}: {
+  projectDefinitions: ProjectDefinition[];
+}) {
   const session = useSession();
   const [buttonState, setButtonState] = useState({
     color: '',
@@ -67,13 +72,15 @@ export default function ProjectHeader() {
           onChange={(e) => setName(e.target.value)}
         />
         <Button onClick={handleAddProject}>Add Project</Button>
-        <Button
-          loading={buttonState.loading}
-          style={{ backgroundColor: buttonState.color }}
-          onClick={() => startAnalysis(session)}
-        >
-          {buttonState.text}
-        </Button>
+        {projectDefinitions.length > 0 && (
+          <Button
+            loading={buttonState.loading}
+            style={{ backgroundColor: buttonState.color }}
+            onClick={() => startAnalysis(session)}
+          >
+            {buttonState.text}
+          </Button>
+        )}
       </div>
     </div>
   );
